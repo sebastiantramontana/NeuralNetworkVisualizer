@@ -1,2 +1,2 @@
-# NeuralNetworkViewer
+# NeuralNetworkVisualizer
 Easy neural network visualizer control for .Net
