@@ -1,0 +1,27 @@
+﻿using NeuralNetworkVisualizer.Drawing;
+using NeuralNetworkVisualizer.Preferences.Brushes;
+using System;
+using System.Drawing;
+
+namespace NeuralNetworkVisualizer.Preferences
+{
+    public class TextPreference : IDisposable
+    {
+        private StringFormat _format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.Character };
+
+        public string FontFamily { get; set; } = "Tahoma";
+        public FontStyle FontStyle { get; set; } = FontStyle.Regular;
+        public BrushPreference Brush { get; set; } = new SolidBrushPreference(Color.Black);
+        public StringFormat Format { get => _format; set => _format = value; }
+        
+        internal FontInfo CreateFontInfo()
+        {
+            return new FontInfo(this.FontFamily, this.FontStyle);
+        }
+
+        public void Dispose()
+        {
+            Destroy.Disposable(ref _format);
+        }
+    }
+}

@@ -1,0 +1,12 @@
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\bin\Debug\WindowsFormsApp1.exe
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\bin\Debug\NeuralNetworkVisualizer.dll
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\bin\Debug\NeuralNetworkVisualizer.pdb
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\Example.csprojAssemblyReference.cache
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\WindowsFormsApp1.Form1.resources
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\Example.csproj.GenerateResource.cache
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\Example.csproj.CoreCompileInputs.cache
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\Example.csproj.CopyComplete
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\WindowsFormsApp1.exe
+C:\Users\stramontana\source\repos\NeuralNetworkVisualizer\Example\obj\Debug\WindowsFormsApp1.pdb
