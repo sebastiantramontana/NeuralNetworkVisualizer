@@ -2,15 +2,15 @@
 Easy neural network visualizer control for .Net
 
 ## screenshot: Regular
-![Regular](docs/screenshot1.png)
+![Regular](docs/screen1.png)
 
 ## Depending on objects size, labels can be hidden
 
 **screenshot: Auto sized**
-![Auto size](docs/screenshot2.png)
+![Auto size](docs/screen2.png)
 
 **screenshot: Auto sized**
-![Auto size](docs/screenshot2.png)
+![Auto size](docs/screen3.png)
 
 ##Example
 
