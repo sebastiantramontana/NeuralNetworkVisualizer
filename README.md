@@ -1,21 +1,21 @@
 # NeuralNetworkVisualizer
 Easy neural network visualizer control for .Net
 
-##screenshot: Regular
-![Regular](/docs/screenshot1.png)
+## screenshot: Regular
+![Regular](docs/screenshot1.png)
 
-##Depending on objects size, label can be hidden
-
-**screenshot: Auto sized**
-![Auto size](/docs/screenshot2.png)
+## Depending on objects size, label can be hidden
 
 **screenshot: Auto sized**
-![Auto size](/docs/screenshot2.png)
+![Auto size](docs/screenshot2.png)
+
+**screenshot: Auto sized**
+![Auto size](docs/screenshot2.png)
 
 ##Example
 
 ´´´C#
-var _input = new InputLayer("Input")
+            var _input = new InputLayer("Input")
             {
                 Bias = new Bias("bias") { OutputValue = 1.234 }
             };
