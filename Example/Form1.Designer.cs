@@ -130,6 +130,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NeuralNetworkVisualizerControl1.AutoScroll = true;
+            this.NeuralNetworkVisualizerControl1.BackColor = System.Drawing.Color.White;
             this.NeuralNetworkVisualizerControl1.InputLayer = null;
             this.NeuralNetworkVisualizerControl1.Location = new System.Drawing.Point(12, 12);
             this.NeuralNetworkVisualizerControl1.Name = "NeuralNetworkVisualizerControl1";
@@ -164,7 +165,7 @@
             this.Controls.Add(this.btnAddBias);
             this.Controls.Add(this.btnStart);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Example";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackZoom)).EndInit();
