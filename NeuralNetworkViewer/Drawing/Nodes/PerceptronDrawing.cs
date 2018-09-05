@@ -19,8 +19,11 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly PerceptronSizesCache _cache;
         private readonly EdgeSizesCache _edgesCache;
 
+        private static IDictionary<ActivationFunction, Image> _activationFunctionImageCache;
+
         static PerceptronDrawing()
         {
+            _activationFunctionImageCache = new Dictionary<ActivationFunction, Image>(8);
             PreloadActivationFunctionImages();
         }
 
@@ -97,13 +100,15 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             }
         }
 
-        private static IDictionary<ActivationFunction, Image> _activationFunctionImageCache = new Dictionary<ActivationFunction, Image>(8);
-
         internal static void DestroyActivationFunctionImagesCache()
         {
+            if (_activationFunctionImageCache == null)
+                return;
+
             foreach (var imgcache in _activationFunctionImageCache.Values)
             {
-                imgcache.Dispose();
+                if (imgcache != null)
+                    imgcache.Dispose();
             }
 
             _activationFunctionImageCache.Clear();
