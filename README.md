@@ -14,7 +14,7 @@ Easy neural network visualizer control for .Net
 
 ##Example
 
-´´´C#
+```C#
             var _input = new InputLayer("Input")
             {
                 Bias = new Bias("bias") { OutputValue = 1.234 }
