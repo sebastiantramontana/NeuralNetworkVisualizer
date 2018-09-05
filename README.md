@@ -2,17 +2,17 @@
 Easy neural network visualizer control for .Net
 
 ## screenshot: Regular
-![Regular](docs/screen1.png)
+![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen1.PNG)
 
 ## Depending on objects size, labels can be hidden
 
 **screenshot: Auto sized**
-![Auto size](docs/screen2.png)
+![Auto size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen2.PNG)
 
 **screenshot: Auto sized**
-![Auto size](docs/screen3.png)
+![Auto size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen3.PNG)
 
-##Example
+## Example
 
 ```C#
             var _input = new InputLayer("Input")
