@@ -1,7 +1,7 @@
 # NeuralNetworkVisualizer
 Easy neural network visualizer control for .Net
 
-## screenshot: Regular
+## Screenshot: Regular
 ![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen4.PNG)
 
 **With layer titles**
@@ -9,10 +9,10 @@ Easy neural network visualizer control for .Net
 
 ## Depending on objects size, labels can be hidden
 
-**screenshot: Auto sized**
+**Screenshot: Auto sized**
 ![Auto size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen2.PNG)
 
-**screenshot: Auto sized**
+**Screenshot: Auto sized**
 ![Auto size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen3.PNG)
 
 ## Example
