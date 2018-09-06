@@ -12,10 +12,10 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _text = value;
         }
 
-        private Pen _connector;
+        private Pen _connector = Pens.Black;
         public Pen Connector
         {
-            get => _connector ?? (_connector = Pens.Black);
+            get => _connector ?? (_connector = Pens.Transparent);
             set => _connector = value;
         }
 

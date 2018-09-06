@@ -9,7 +9,7 @@ namespace NeuralNetworkVisualizer.Preferences
         private IBrushPreference _background;
         public IBrushPreference Background
         {
-            get => _background ?? (_background = new SolidBrushPreference(Color.White));
+            get => _background ?? (_background = new SolidBrushPreference(Color.Transparent));
             set => _background = value;
         }
 
