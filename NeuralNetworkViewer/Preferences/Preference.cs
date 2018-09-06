@@ -6,7 +6,13 @@ namespace NeuralNetworkVisualizer.Preferences
 {
     public class Preference : IDisposable
     {
-        private LayerPreference _layers;
+        private LayerPreference _layers = new LayerPreference
+        {
+            Title = new LayerTitlePreference() { Background = new GradientBrushPreference(Color.LightSteelBlue, Color.LightSkyBlue, 90), Font = new TextPreference { FontStyle = FontStyle.Bold }, Height = 20 },
+            Border = Pens.Black,
+            Background = new SolidBrushPreference(Color.Transparent)
+        };
+
         private NodePreference _inputs;
         private NodePreference _perceptrons;
         private NodePreference _biases;

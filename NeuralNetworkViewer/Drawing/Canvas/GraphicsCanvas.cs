@@ -27,10 +27,10 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
             rect.Width = Math.Min(this.MaxWidth, rect.Width);
             rect.Height = Math.Min(this.MaxHeight, rect.Height);
 
-            if (brush != null)
+            if (Validate(brush))
                 _Graph.FillRectangle(brush, rect);
 
-            if (pen != null)
+            if (Validate(pen))
                 _Graph.DrawRectangle(pen, rect);
 
         }
@@ -40,25 +40,30 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
             rect.Width = Math.Min(this.MaxWidth, rect.Width);
             rect.Height = Math.Min(this.MaxHeight, rect.Height);
 
-            if (pen != null)
+            if (Validate(pen))
                 _Graph.DrawEllipse(pen, rect);
 
-            if (brush != null)
+            if (Validate(brush))
                 _Graph.FillEllipse(brush, rect);
         }
 
         public void DrawText(string text, Font font, Point position, Brush brush, StringFormat format)
         {
-            _Graph.DrawString(text, font, brush, position, format);
+            if (Validate(brush))
+                _Graph.DrawString(text, font, brush, position, format); //if the other args are null throw the exception
         }
 
         public void DrawText(string text, FontInfo fontInfo, Rectangle rect, Brush brush, StringFormat format)
         {
-            DrawAdjustedFontString(text, fontInfo, rect.Size, (font) => _Graph.DrawString(text, font, brush, rect, format));
+            if (Validate(brush))
+                DrawAdjustedFontString(text, fontInfo, rect.Size, (font) => _Graph.DrawString(text, font, brush, rect, format));
         }
 
         public void DrawText(string text, FontInfo fontInfo, Rectangle rect, Brush brush, StringFormat format, float angle)
         {
+            if (!Validate(brush))
+                return;
+
             DrawAdjustedFontString(text, fontInfo, rect.Size, (font) =>
             {
                 var transform = _Graph.Transform;
@@ -79,7 +84,8 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
 
         public void DrawLine(Point p1, Point p2, Pen pen)
         {
-            _Graph.DrawLine(pen, p1, p2);
+            if (Validate(pen))
+                _Graph.DrawLine(pen, p1, p2);
         }
 
         public void DrawImage(Image image, Point position, Size size)
@@ -128,6 +134,18 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
             }
 
             return null;
+        }
+
+        private bool Validate(Brush brush)
+        {
+            var solid = brush as SolidBrush;
+
+            return brush != null && (solid == null || solid.Color.ToArgb() != Color.Transparent.ToArgb());
+        }
+
+        private bool Validate(Pen pen)
+        {
+            return pen != null && pen.Color.ToArgb() != Color.Transparent.ToArgb();
         }
     }
 }
