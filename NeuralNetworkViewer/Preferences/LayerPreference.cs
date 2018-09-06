@@ -13,14 +13,14 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _background = value;
         }
 
-        private Pen _border;
+        private Pen _border = Pens.Black;
         public Pen Border
         {
-            get => _border ?? (_border = Pens.Black);
+            get => _border;
             set => _border = value;
         }
 
-        private LayerTitlePreference _title;
+        private LayerTitlePreference _title = new LayerTitlePreference() { Background = new GradientBrushPreference(Color.LightSteelBlue, Color.LightSkyBlue, 90), Font = { FontStyle = FontStyle.Bold }, Height = 20 };
         public LayerTitlePreference Title
         {
             get => _title ?? (_title = new LayerTitlePreference());

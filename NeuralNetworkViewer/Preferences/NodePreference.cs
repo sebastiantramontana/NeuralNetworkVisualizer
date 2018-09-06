@@ -9,7 +9,7 @@ namespace NeuralNetworkVisualizer.Preferences
         private IBrushPreference _background;
         public IBrushPreference Background
         {
-            get => _background ?? (_background = new SolidBrushPreference(Color.White));
+            get => _background ?? (_background = new SolidBrushPreference(Color.Transparent));
             set => _background = value;
         }
 
@@ -20,10 +20,10 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _text = value;
         }
 
-        private Pen _border;
+        private Pen _border = Pens.Black;
         public Pen Border
         {
-            get => _border ?? (_border = Pens.Black);
+            get => _border ?? (_border = Pens.Transparent);
             set => _border = value;
         }
 

@@ -22,8 +22,6 @@ namespace WindowsFormsApp1
             cboQuality.Items.Add(RenderQuality.High);
 
             cboQuality.SelectedItem = NeuralNetworkVisualizerControl1.Preferences.Quality;
-
-            NeuralNetworkVisualizerControl1.Preferences.Layers = null;
         }
 
         private void btnStart_Click(object sender, EventArgs e)

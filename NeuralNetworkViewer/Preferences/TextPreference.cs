@@ -16,17 +16,17 @@ namespace NeuralNetworkVisualizer.Preferences
 
         public FontStyle FontStyle { get; set; } = FontStyle.Regular;
 
-        private IBrushPreference _brush;
+        private IBrushPreference _brush = new SolidBrushPreference(Color.Black);
         public IBrushPreference Brush
         {
-            get => _brush ?? (_brush = new SolidBrushPreference(Color.Black));
+            get => _brush ?? (_brush = new SolidBrushPreference(Color.Transparent));
             set { _brush = value; }
         }
 
-        private StringFormat _format;
+        private StringFormat _format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.Character };
         public StringFormat Format
         {
-            get => _format ?? (_format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.Character });
+            get => _format ?? (_format = StringFormat.GenericDefault);
             set => _format = value;
         }
 

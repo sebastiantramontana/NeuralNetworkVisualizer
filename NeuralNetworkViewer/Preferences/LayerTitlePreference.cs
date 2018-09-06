@@ -9,18 +9,18 @@ namespace NeuralNetworkVisualizer.Preferences
         private TextPreference _font;
         public TextPreference Font
         {
-            get => _font ?? (_font = new TextPreference() { FontStyle = FontStyle.Bold });
+            get => _font ?? (_font = new TextPreference());
             set => _font = value;
         }
 
         private IBrushPreference _background;
         public IBrushPreference Background
         {
-            get => _background ?? (Background = new GradientBrushPreference(Color.LightSteelBlue, Color.LightSkyBlue, 90));
+            get => _background ?? (_background = new SolidBrushPreference(Color.Transparent));
             set => _background = value;
         }
 
-        public int Height { get; set; } = 20;
+        public int Height { get; set; }
 
         public void Dispose()
         {

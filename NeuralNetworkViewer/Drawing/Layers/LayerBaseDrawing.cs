@@ -82,9 +82,13 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         }
         private void DrawTitle(ICanvas canvas)
         {
+            if (_preferences.Layers.Title.Height <= 0)
+            {
+                return;
+            }
+
             var rectTitle = new Rectangle(0, 0, canvas.MaxWidth, _preferences.Layers.Title.Height);
 
-            //TODO: review design
             if (_preferences.Layers.Title.Background is GradientBrushPreference backTitle)
             {
                 backTitle.Rectangle = rectTitle;
