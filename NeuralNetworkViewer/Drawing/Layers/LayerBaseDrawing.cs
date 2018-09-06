@@ -39,7 +39,7 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         {
             var rect = new Rectangle(0, 0, canvas.MaxWidth, canvas.MaxHeight);
 
-            using (var brush = _preferences.Layers.Background?.CreateBrush())
+            using (var brush = _preferences.Layers.Background.CreateBrush())
             {
                 canvas.DrawRectangle(rect, _preferences.Layers.Border, brush);
             }
@@ -50,10 +50,10 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
 
         private void DrawNodes(ICanvas canvas)
         {
-            var nodeWidth = canvas.MaxWidth - _preferences.Margins * 2;
-            var nodeHeight = ((canvas.MaxHeight - _preferences.Layers.HeightTitle) / _maxNodes) - (_preferences.Margins + _preferences.Margins / _maxNodes);
-            var y = ((canvas.MaxHeight - _preferences.Layers.HeightTitle) - (nodeHeight * this.Element.GetAllNodes().Count())) / 2;
-            var minimumY = _preferences.Layers.HeightTitle + _preferences.Margins;
+            int nodeWidth = canvas.MaxWidth - _preferences.Margins * 2;
+            int nodeHeight = ((canvas.MaxHeight - _preferences.Layers.Title.Height) / _maxNodes) - (_preferences.Margins + _preferences.Margins / _maxNodes);
+            int y = ((canvas.MaxHeight - _preferences.Layers.Title.Height) - (nodeHeight * this.Element.GetAllNodes().Count())) / 2;
+            var minimumY = _preferences.Layers.Title.Height + _preferences.Margins;
             y = (y < minimumY ? minimumY : y);
 
             if (this.Element.Bias != null)
@@ -82,22 +82,22 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         }
         private void DrawTitle(ICanvas canvas)
         {
-            var rectTitle = new Rectangle(0, 0, canvas.MaxWidth, _preferences.Layers.HeightTitle);
+            var rectTitle = new Rectangle(0, 0, canvas.MaxWidth, _preferences.Layers.Title.Height);
 
             //TODO: review design
-            if (_preferences.Layers.BackgroundTitle is GradientBrushPreference backTitle)
+            if (_preferences.Layers.Title.Background is GradientBrushPreference backTitle)
             {
                 backTitle.Rectangle = rectTitle;
             }
 
-            using (var backgroundTitle = _preferences.Layers.BackgroundTitle?.CreateBrush())
+            using (var backgroundTitle = _preferences.Layers.Title.Background.CreateBrush())
             {
                 canvas.DrawRectangle(rectTitle, null, backgroundTitle);
             }
 
-            using (var brush = _preferences.Layers.FontTitle.Brush?.CreateBrush())
+            using (var brush = _preferences.Layers.Title.Font.Brush.CreateBrush())
             {
-                canvas.DrawText(this.Element.Id, _preferences.Layers.FontTitle.CreateFontInfo(), rectTitle, brush, _preferences.Layers.FontTitle.Format);
+                canvas.DrawText(this.Element.Id, _preferences.Layers.Title.Font.CreateFontInfo(), rectTitle, brush, _preferences.Layers.Title.Font.Format);
             }
         }
 

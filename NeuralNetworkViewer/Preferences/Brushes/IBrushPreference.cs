@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Preferences.Brushes
 {
-    public abstract class BrushPreference
+    public interface IBrushPreference
     {
-        internal abstract Brush CreateBrush();
+        Brush CreateBrush();
     }
 }

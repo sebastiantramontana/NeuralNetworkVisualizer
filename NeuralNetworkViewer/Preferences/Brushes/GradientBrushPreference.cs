@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Preferences.Brushes
 {
-    public class GradientBrushPreference : BrushPreference
+    public class GradientBrushPreference : IBrushPreference
     {
         private readonly Color _color1;
         private readonly Color _color2;
@@ -22,7 +22,7 @@ namespace NeuralNetworkVisualizer.Preferences.Brushes
         }
 
         internal Rectangle Rectangle { get; set; }
-        internal override Brush CreateBrush()
+        public Brush CreateBrush()
         {
             return new LinearGradientBrush(this.Rectangle, _color1, _color2, _angle);
         }

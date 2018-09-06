@@ -24,7 +24,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             {
                 var outputRectangle = GetOutputRectangle(rect);
 
-                using (var fontBrush = _preferences.Text.Brush?.CreateBrush())
+                using (var fontBrush = _preferences.Text.Brush.CreateBrush())
                 {
                     canvas.DrawText(Math.Round(this.Element.OutputValue.Value, _preferences.RoundingDigits).ToString(), _preferences.Text.CreateFontInfo(), outputRectangle, fontBrush, _preferences.Text.Format);
                 }

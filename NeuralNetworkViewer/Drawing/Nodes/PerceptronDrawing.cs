@@ -44,7 +44,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             var perceptronFont = _preferences.Perceptrons.Text.CreateFontInfo();
             var fontFormatPreference = _preferences.Perceptrons.Text.Format;
 
-            using (var brushFontPreference = _preferences.Perceptrons.Text.Brush?.CreateBrush())
+            using (var brushFontPreference = _preferences.Perceptrons.Text.Brush.CreateBrush())
             {
                 if (this.Element.SumValue.HasValue)
                     canvas.DrawText('\u2211' + " " + Math.Round(this.Element.SumValue.Value, roundingDigits).ToString(), perceptronFont, sizesPositions.SumRectangle, brushFontPreference, fontFormatPreference);

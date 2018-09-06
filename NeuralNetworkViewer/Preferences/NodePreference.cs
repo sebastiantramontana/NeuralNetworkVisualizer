@@ -1,21 +1,32 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Preferences
 {
     public class NodePreference : IDisposable
     {
-        private Pen _border = Pens.Black;
-        private TextPreference _text = new TextPreference();
+        private IBrushPreference _background;
+        public IBrushPreference Background
+        {
+            get => _background ?? (_background = new SolidBrushPreference(Color.White));
+            set => _background = value;
+        }
 
-        public BrushPreference Background { get; set; } = new SolidBrushPreference(Color.White);
-        public TextPreference Text { get => _text; set => _text = value; }
-        public Pen Border { get => _border; set => _border = value; }
+        private TextPreference _text;
+        public TextPreference Text
+        {
+            get => _text ?? (_text = new TextPreference());
+            set => _text = value;
+        }
+
+        private Pen _border;
+        public Pen Border
+        {
+            get => _border ?? (_border = Pens.Black);
+            set => _border = value;
+        }
+
         public byte RoundingDigits { get; set; } = 3;
 
         public void Dispose()

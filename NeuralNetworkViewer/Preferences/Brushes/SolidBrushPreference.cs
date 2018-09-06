@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace NeuralNetworkVisualizer.Preferences.Brushes
 {
-    public class SolidBrushPreference : BrushPreference
+    public class SolidBrushPreference : IBrushPreference
     {
         private readonly Color _color;
 
@@ -16,7 +11,7 @@ namespace NeuralNetworkVisualizer.Preferences.Brushes
             this._color = color;
         }
 
-        internal override Brush CreateBrush()
+        public Brush CreateBrush()
         {
             return new SolidBrush(_color);
         }

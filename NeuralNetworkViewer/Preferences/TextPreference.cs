@@ -7,13 +7,29 @@ namespace NeuralNetworkVisualizer.Preferences
 {
     public class TextPreference : IDisposable
     {
-        private StringFormat _format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.Character };
+        private string _fontFamily;
+        public string FontFamily
+        {
+            get => _fontFamily ?? (_fontFamily = "Tahoma");
+            set => _fontFamily = value;
+        }
 
-        public string FontFamily { get; set; } = "Tahoma";
         public FontStyle FontStyle { get; set; } = FontStyle.Regular;
-        public BrushPreference Brush { get; set; } = new SolidBrushPreference(Color.Black);
-        public StringFormat Format { get => _format; set => _format = value; }
-        
+
+        private IBrushPreference _brush;
+        public IBrushPreference Brush
+        {
+            get => _brush ?? (_brush = new SolidBrushPreference(Color.Black));
+            set { _brush = value; }
+        }
+
+        private StringFormat _format;
+        public StringFormat Format
+        {
+            get => _format ?? (_format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.Character });
+            set => _format = value;
+        }
+
         internal FontInfo CreateFontInfo()
         {
             return new FontInfo(this.FontFamily, this.FontStyle);
