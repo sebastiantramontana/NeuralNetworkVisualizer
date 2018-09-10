@@ -7,7 +7,7 @@ Easy neural network visualizer control for .Net
 
 **With layer titles**
 ![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen1.PNG)
-![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/ConditionalValueFormat/docs/screen_format1.PNG)
+![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/FormattingElements/docs/screen_connector_format.PNG)
 
 ## Depending on objects size, labels can be hidden
 
