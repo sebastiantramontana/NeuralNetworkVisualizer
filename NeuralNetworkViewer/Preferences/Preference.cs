@@ -1,5 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
-using NeuralNetworkVisualizer.Preferences.Text;
+using NeuralNetworkVisualizer.Preferences.Formatting;
 using System;
 using System.Drawing;
 
@@ -10,7 +10,7 @@ namespace NeuralNetworkVisualizer.Preferences
         private LayerPreference _layers = new LayerPreference
         {
             Title = new LayerTitlePreference() { Background = new GradientBrushPreference(Color.LightSteelBlue, Color.LightSkyBlue, 90), Font = new TextPreference { FontStyle = FontStyle.Bold }, Height = 20 },
-            Border = Pens.Black,
+            Border = new Pen(Color.Black),
             Background = new SolidBrushPreference(Color.Transparent)
         };
 
@@ -58,7 +58,6 @@ namespace NeuralNetworkVisualizer.Preferences
             Destroy.Disposable(ref _inputs);
             Destroy.Disposable(ref _perceptrons);
             Destroy.Disposable(ref _biases);
-            Destroy.Disposable(ref _edges);
         }
     }
 }

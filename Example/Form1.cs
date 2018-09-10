@@ -2,9 +2,10 @@
 using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences.Brushes;
-using NeuralNetworkVisualizer.Preferences.Text;
+using NeuralNetworkVisualizer.Preferences.Formatting;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -26,23 +27,25 @@ namespace WindowsFormsApp1
 
             cboQuality.SelectedItem = NeuralNetworkVisualizerControl1.Preferences.Quality;
 
-            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new TextValueFormatter(
+            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new Formatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new TextValueFormatter(
+            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new Formatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new TextValueFormatter(
+            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new Formatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
+
+            NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -70,13 +73,14 @@ namespace WindowsFormsApp1
 
             hidden.Connect(output);
 
-            var aleatorio = new Random(31);
+            var aleatorio = new Random(2);
 
             foreach (var p in hidden.Nodes)
             {
                 foreach (var edge in p.Edges)
                 {
-                    edge.Weight = aleatorio.NextDouble() * ((DateTime.Now.Ticks % 2 == 0) ? 1 : -1);
+                    int sign = aleatorio.Next(-1, 2);
+                    edge.Weight = aleatorio.NextDouble() * sign;
                 }
             }
 
@@ -84,7 +88,8 @@ namespace WindowsFormsApp1
             {
                 foreach (var edge in p.Edges)
                 {
-                    edge.Weight = aleatorio.NextDouble();
+                    int sign = aleatorio.Next(-1, 1);
+                    edge.Weight = aleatorio.NextDouble() * sign;
                 }
             }
 

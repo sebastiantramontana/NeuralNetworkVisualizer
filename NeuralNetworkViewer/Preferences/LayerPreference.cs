@@ -14,9 +14,12 @@ namespace NeuralNetworkVisualizer.Preferences
         }
 
         private Pen _border;
+        /// <summary>
+        /// The Pen for border: Don't use a System Pen, but clone it!
+        /// </summary>
         public Pen Border
         {
-            get => _border ?? (_border = Pens.Transparent);
+            get => _border ?? (_border = new Pen(Color.Transparent));
             set => _border = value;
         }
 
@@ -30,12 +33,7 @@ namespace NeuralNetworkVisualizer.Preferences
         public void Dispose()
         {
             Destroy.Disposable(ref _title);
-
-            try
-            {
-                Destroy.Disposable(ref _border);
-            }
-            catch { }
+            Destroy.Disposable(ref _border);
         }
     }
 }

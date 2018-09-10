@@ -1,34 +1,27 @@
-﻿using NeuralNetworkVisualizer.Preferences.Text;
-using System;
+﻿using NeuralNetworkVisualizer.Preferences.Formatting;
 using System.Drawing;
 
 namespace NeuralNetworkVisualizer.Preferences
 {
-    public class EdgePreference : IDisposable
+    public class EdgePreference
     {
-        private TextValueFormatter _valueFormatter;
-        public TextValueFormatter ValueFormatter
+        private Formatter<TextPreference> _valueFormatter;
+        public Formatter<TextPreference> ValueFormatter
         {
-            get => _valueFormatter ?? (_valueFormatter = new TextValueFormatter());
+            get => _valueFormatter ?? (_valueFormatter = new Formatter<TextPreference>(() => new TextPreference()));
             set => _valueFormatter = value;
         }
 
-        private Pen _connector = Pens.Black;
-        public Pen Connector
+        private Formatter<Pen> _connectorFormatter = new Formatter<Pen>(() => new Pen(Color.Black));
+        /// <summary>
+        /// The Pen for connector: Don't use a System Pen, but clone it!
+        /// </summary>
+        public Formatter<Pen> Connector
         {
-            get => _connector ?? (_connector = Pens.Transparent);
-            set => _connector = value;
+            get => _connectorFormatter ?? (_connectorFormatter = new Formatter<Pen>(() => new Pen(Color.Transparent)));
+            set => _connectorFormatter = value;
         }
 
         public byte RoundingDigits { get; set; } = 3;
-
-        public void Dispose()
-        {
-            try
-            {
-                Destroy.Disposable(ref _connector);
-            }
-            catch { }
-        }
     }
 }

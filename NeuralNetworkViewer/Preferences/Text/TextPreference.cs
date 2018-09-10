@@ -3,7 +3,7 @@ using NeuralNetworkVisualizer.Preferences.Brushes;
 using System;
 using System.Drawing;
 
-namespace NeuralNetworkVisualizer.Preferences.Text
+namespace NeuralNetworkVisualizer.Preferences.Formatting
 {
     public class TextPreference : IDisposable
     {

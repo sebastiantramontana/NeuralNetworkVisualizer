@@ -13,7 +13,7 @@ namespace NeuralNetworkVisualizer.Preferences.Brushes
 
         public Brush CreateBrush()
         {
-            return (_color != Color.Transparent ? new SolidBrush(_color) : System.Drawing.Brushes.Transparent.Clone() as Brush);
+            return (_color.ToArgb() != Color.Transparent.ToArgb() ? new SolidBrush(_color) : System.Drawing.Brushes.Transparent.Clone() as Brush);
         }
     }
 }

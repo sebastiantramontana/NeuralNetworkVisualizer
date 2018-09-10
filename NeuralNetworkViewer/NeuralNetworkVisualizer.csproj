@@ -89,7 +89,7 @@
     <Compile Include="Preferences\Brushes\IBrushPreference.cs" />
     <Compile Include="Preferences\Brushes\SolidBrushPreference.cs" />
     <Compile Include="Preferences\PerceptronPreference.cs" />
-    <Compile Include="Preferences\Text\TextValueFormatter.cs" />
+    <Compile Include="Preferences\Formatting\Formatter.cs" />
     <Compile Include="Preferences\EdgePreference.cs" />
     <Compile Include="Preferences\LayerPreference.cs" />
     <Compile Include="Preferences\NodePreference.cs" />
