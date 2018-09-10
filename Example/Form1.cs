@@ -1,7 +1,10 @@
 ﻿using NeuralNetworkVisualizer.Model;
 using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
+using NeuralNetworkVisualizer.Preferences.Brushes;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -22,6 +25,24 @@ namespace WindowsFormsApp1
             cboQuality.Items.Add(RenderQuality.High);
 
             cboQuality.SelectedItem = NeuralNetworkVisualizerControl1.Preferences.Quality;
+
+            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new TextValueFormatter(
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+            );
+
+            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new TextValueFormatter(
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+            );
+
+            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new TextValueFormatter(
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+            );
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -32,14 +53,14 @@ namespace WindowsFormsApp1
             };
 
             _input.AddNode(new Input("e2") { OutputValue = 0.455 });
-            _input.AddNode(new Input("e3") { OutputValue = 0.78967656 });
-            _input.AddNode(new Input("e4") { OutputValue = 0.876545 });
+            _input.AddNode(new Input("e3") { OutputValue = -0.78967656 });
+            _input.AddNode(new Input("e4") { OutputValue = 0.0 });
 
             var hidden = new PerceptronLayer("Hidden");
 
             hidden.AddNode(new Perceptron("o1") { ActivationFunction = ActivationFunction.LeakyRelu, OutputValue = 2.364, SumValue = 2.364 });
-            hidden.AddNode(new Perceptron("o2") { ActivationFunction = ActivationFunction.Tanh, OutputValue = 0.552, SumValue = 55.44 });
-            hidden.AddNode(new Perceptron("o3") { ActivationFunction = ActivationFunction.Sigmoid, OutputValue = 0.876545, SumValue = 11.22 });
+            hidden.AddNode(new Perceptron("o2") { ActivationFunction = ActivationFunction.Tanh, OutputValue = -0.552, SumValue = 55.44 });
+            hidden.AddNode(new Perceptron("o3") { ActivationFunction = ActivationFunction.Sigmoid, OutputValue = 0.0, SumValue = 11.22 });
 
             _input.Connect(hidden);
 
@@ -55,7 +76,7 @@ namespace WindowsFormsApp1
             {
                 foreach (var edge in p.Edges)
                 {
-                    edge.Weight = aleatorio.NextDouble();
+                    edge.Weight = aleatorio.NextDouble() * ((DateTime.Now.Ticks % 2 == 0) ? 1 : -1);
                 }
             }
 

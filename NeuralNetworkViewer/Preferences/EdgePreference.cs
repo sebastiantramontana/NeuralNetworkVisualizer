@@ -1,15 +1,16 @@
-﻿using System;
+﻿using NeuralNetworkVisualizer.Preferences.Text;
+using System;
 using System.Drawing;
 
 namespace NeuralNetworkVisualizer.Preferences
 {
     public class EdgePreference : IDisposable
     {
-        private TextPreference _text;
-        public TextPreference Text
+        private TextValueFormatter _valueFormatter;
+        public TextValueFormatter ValueFormatter
         {
-            get => _text ?? (_text = new TextPreference());
-            set => _text = value;
+            get => _valueFormatter ?? (_valueFormatter = new TextValueFormatter());
+            set => _valueFormatter = value;
         }
 
         private Pen _connector = Pens.Black;
@@ -23,8 +24,6 @@ namespace NeuralNetworkVisualizer.Preferences
 
         public void Dispose()
         {
-            Destroy.Disposable(ref _text);
-
             try
             {
                 Destroy.Disposable(ref _connector);

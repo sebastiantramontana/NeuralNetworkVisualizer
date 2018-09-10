@@ -10,8 +10,8 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
         public GraphicsCanvas(Graphics graph, int maxWidth, int maxHeight)
         {
             _Graph = graph;
-            MaxWidth = maxWidth;
-            MaxHeight = maxHeight;
+            this.MaxWidth = maxWidth;
+            this.MaxHeight = maxHeight;
         }
 
         public int MaxWidth { get; private set; }

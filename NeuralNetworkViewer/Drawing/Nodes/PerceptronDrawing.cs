@@ -41,18 +41,29 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             var sizesPositions = GetSizePositions(rect);
 
             var roundingDigits = _preferences.Perceptrons.RoundingDigits;
-            var perceptronFont = _preferences.Perceptrons.Text.CreateFontInfo();
-            var fontFormatPreference = _preferences.Perceptrons.Text.Format;
+            //var perceptronFont = _preferences.Perceptrons.Text.CreateFontInfo();
+            //var fontFormatPreference = _preferences.Perceptrons.Text.Format;
 
-            using (var brushFontPreference = _preferences.Perceptrons.Text.Brush.CreateBrush())
+            if (this.Element.SumValue.HasValue)
             {
-                if (this.Element.SumValue.HasValue)
-                    canvas.DrawText('\u2211' + " " + Math.Round(this.Element.SumValue.Value, roundingDigits).ToString(), perceptronFont, sizesPositions.SumRectangle, brushFontPreference, fontFormatPreference);
+                using (var sumFormat = _preferences.Perceptrons.SumValueFormatter.GetFormat(this.Element.SumValue.Value))
+                using (var sumBrushFontPreference = sumFormat.Brush.CreateBrush())
+                {
 
-                DrawActivationFunction(sizesPositions.ActivationFunctionPosition, sizesPositions.ActivationFunctionSize, canvas);
+                    canvas.DrawText('\u2211' + " " + Math.Round(this.Element.SumValue.Value, roundingDigits).ToString(), sumFormat.CreateFontInfo(), sizesPositions.SumRectangle, sumBrushFontPreference, sumFormat.Format);
+                }
+            }
 
-                if (this.Element.OutputValue.HasValue)
-                    canvas.DrawText(Math.Round(this.Element.OutputValue.Value, roundingDigits).ToString(), perceptronFont, sizesPositions.OutputRectangle, brushFontPreference, fontFormatPreference);
+            DrawActivationFunction(sizesPositions.ActivationFunctionPosition, sizesPositions.ActivationFunctionSize, canvas);
+
+            if (this.Element.OutputValue.HasValue)
+            {
+                using (var outputFormat = _preferences.Perceptrons.OutputValueFormatter.GetFormat(this.Element.OutputValue.Value))
+                using (var outputBrushFontPreference = outputFormat.Brush.CreateBrush())
+                {
+
+                    canvas.DrawText(Math.Round(this.Element.OutputValue.Value, roundingDigits).ToString(), outputFormat.CreateFontInfo(), sizesPositions.OutputRectangle, outputBrushFontPreference, outputFormat.Format);
+                }
             }
 
             DrawEdges(sizesPositions.InputPosition, canvas, sizesPositions.OutputRectangle.Height);

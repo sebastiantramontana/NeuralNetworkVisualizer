@@ -1,4 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
 
@@ -14,7 +15,7 @@ namespace NeuralNetworkVisualizer.Preferences
         };
 
         private NodePreference _inputs;
-        private NodePreference _perceptrons;
+        private PerceptronPreference _perceptrons;
         private NodePreference _biases;
         private EdgePreference _edges;
 
@@ -30,9 +31,9 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _inputs = value;
         }
 
-        public NodePreference Perceptrons
+        public PerceptronPreference Perceptrons
         {
-            get => _perceptrons ?? (_perceptrons = new NodePreference { Background = new SolidBrushPreference(Color.Azure), Border = new Pen(Color.LightBlue, 3f) });
+            get => _perceptrons ?? (_perceptrons = new PerceptronPreference { Background = new SolidBrushPreference(Color.Azure), Border = new Pen(Color.LightBlue, 3f) });
             set => _perceptrons = value;
         }
 

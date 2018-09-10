@@ -1,4 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
 
@@ -13,11 +14,11 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _background = value;
         }
 
-        private TextPreference _text;
-        public TextPreference Text
+        private TextValueFormatter _outputValueFormatter;
+        public TextValueFormatter OutputValueFormatter
         {
-            get => _text ?? (_text = new TextPreference());
-            set => _text = value;
+            get => _outputValueFormatter ?? (_outputValueFormatter = new TextValueFormatter());
+            set => _outputValueFormatter = value;
         }
 
         private Pen _border = Pens.Black;
@@ -31,8 +32,6 @@ namespace NeuralNetworkVisualizer.Preferences
 
         public void Dispose()
         {
-            Destroy.Disposable(ref _text);
-
             try
             {
                 Destroy.Disposable(ref _border);

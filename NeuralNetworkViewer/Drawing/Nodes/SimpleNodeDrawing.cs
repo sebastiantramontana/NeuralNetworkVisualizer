@@ -20,14 +20,15 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
 
         protected override void DrawContent(ICanvas canvas, Rectangle rect)
         {
-            if (this.Element.OutputValue.HasValue)
-            {
-                var outputRectangle = GetOutputRectangle(rect);
+            if (!this.Element.OutputValue.HasValue)
+                return;
 
-                using (var fontBrush = _preferences.Text.Brush.CreateBrush())
-                {
-                    canvas.DrawText(Math.Round(this.Element.OutputValue.Value, _preferences.RoundingDigits).ToString(), _preferences.Text.CreateFontInfo(), outputRectangle, fontBrush, _preferences.Text.Format);
-                }
+            var outputRectangle = GetOutputRectangle(rect);
+
+            using (var valueFormat = _preferences.OutputValueFormatter.GetFormat(this.Element.OutputValue.Value))
+            using (var fontBrush = valueFormat.Brush.CreateBrush())
+            {
+                canvas.DrawText(Math.Round(this.Element.OutputValue.Value, _preferences.RoundingDigits).ToString(), valueFormat.CreateFontInfo(), outputRectangle, fontBrush, valueFormat.Format);
             }
         }
 

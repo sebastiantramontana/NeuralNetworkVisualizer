@@ -38,12 +38,10 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             var weightValue = Math.Round(this.Element.Weight.Value, _preferences.RoundingDigits).ToString();
             var sizesPositions = GetSizesPositions();
 
-            if (_preferences.Text != null)
+            using (var valueFormat = _preferences.ValueFormatter.GetFormat(this.Element.Weight.Value))
+            using (var brush = valueFormat.Brush.CreateBrush())
             {
-                using (var brush = _preferences.Text.Brush.CreateBrush())
-                {
-                    canvas.DrawText(weightValue, _preferences.Text.CreateFontInfo(), sizesPositions.TextRectangle, brush, _preferences.Text.Format, sizesPositions.Angle);
-                }
+                canvas.DrawText(weightValue, valueFormat.CreateFontInfo(), sizesPositions.TextRectangle, brush, valueFormat.Format, sizesPositions.Angle);
             }
         }
 
