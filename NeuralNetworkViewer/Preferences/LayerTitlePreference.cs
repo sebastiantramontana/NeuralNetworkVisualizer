@@ -1,5 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
-using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
 

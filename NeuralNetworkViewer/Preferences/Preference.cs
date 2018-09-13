@@ -1,5 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
-using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
 
@@ -9,9 +9,9 @@ namespace NeuralNetworkVisualizer.Preferences
     {
         private LayerPreference _layers = new LayerPreference
         {
+            Background = new SolidBrushPreference(Color.White),
             Title = new LayerTitlePreference() { Background = new GradientBrushPreference(Color.LightSteelBlue, Color.LightSkyBlue, 90), Font = new TextPreference { FontStyle = FontStyle.Bold }, Height = 20 },
-            Border = new Pen(Color.Black),
-            Background = new SolidBrushPreference(Color.Transparent)
+            Border = new Pen(Color.Black)
         };
 
         private NodePreference _inputs;
@@ -49,7 +49,7 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _edges = value;
         }
 
-        public byte Margins { get; set; } = 5;
+        public byte NodeMargins { get; set; } = 5;
         public RenderQuality Quality { get; set; } = RenderQuality.Medium;
 
         public void Dispose()

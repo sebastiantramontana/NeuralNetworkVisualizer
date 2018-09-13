@@ -133,6 +133,7 @@
             this.NeuralNetworkVisualizerControl1.BackColor = System.Drawing.Color.White;
             this.NeuralNetworkVisualizerControl1.InputLayer = null;
             this.NeuralNetworkVisualizerControl1.Location = new System.Drawing.Point(12, 12);
+            this.NeuralNetworkVisualizerControl1.Margin = new System.Windows.Forms.Padding(0);
             this.NeuralNetworkVisualizerControl1.Name = "NeuralNetworkVisualizerControl1";
             this.NeuralNetworkVisualizerControl1.Size = new System.Drawing.Size(1257, 690);
             this.NeuralNetworkVisualizerControl1.TabIndex = 10;

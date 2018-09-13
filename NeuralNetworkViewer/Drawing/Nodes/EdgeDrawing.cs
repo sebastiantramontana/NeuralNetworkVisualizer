@@ -13,9 +13,9 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly Point _fromPosition;
         private readonly Point _toPosition;
         private readonly int _textHeight;
-        private readonly EdgeSizesCache _cache;
+        private readonly EdgeSizesPreCalc _cache;
 
-        internal EdgeDrawing(Edge element, EdgePreference preferences, Point fromPosition, Point toPosition, int textHeight, EdgeSizesCache cache) : base(element)
+        internal EdgeDrawing(Edge element, EdgePreference preferences, Point fromPosition, Point toPosition, int textHeight, EdgeSizesPreCalc cache) : base(element)
         {
             _preferences = preferences;
             _fromPosition = fromPosition;

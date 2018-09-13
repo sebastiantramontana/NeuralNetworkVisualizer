@@ -19,11 +19,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.picCanvas)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // picCanvas
             // 
             this.picCanvas.Location = new System.Drawing.Point(0, 0);
             this.picCanvas.Margin = new System.Windows.Forms.Padding(0);
-            this.picCanvas.Name = "pictureBox1";
+            this.picCanvas.Name = "picCanvas";
             this.picCanvas.Size = new System.Drawing.Size(326, 247);
             this.picCanvas.TabIndex = 0;
             this.picCanvas.TabStop = false;

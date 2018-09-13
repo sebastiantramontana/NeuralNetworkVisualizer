@@ -20,15 +20,15 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         where TLayer : LayerBase<TNode>
         where TNode : NodeBase
     {
-        private readonly int _maxNodes;
         private readonly Preference _preferences;
-        private readonly SimpleNodeSizesCache _biasCache;
+        private readonly LayerSizesPreCalc _cache;
+        private readonly SimpleNodeSizesPreCalc _biasCache;
         private readonly IList<INodeDrawing> _nodesDrawing;
 
-        internal LayerBaseDrawing(TLayer layer, int maxNodes, Preference preferences, SimpleNodeSizesCache biasCache) : base(layer)
+        internal LayerBaseDrawing(TLayer layer, Preference preferences, LayerSizesPreCalc cache, SimpleNodeSizesPreCalc biasCache) : base(layer)
         {
-            _maxNodes = maxNodes;
             _preferences = preferences;
+            _cache = cache;
             _biasCache = biasCache;
             _nodesDrawing = new List<INodeDrawing>(layer.GetAllNodes().Count());
         }
@@ -50,18 +50,14 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
 
         private void DrawNodes(ICanvas canvas)
         {
-            int nodeWidth = canvas.MaxWidth - _preferences.Margins * 2;
-            int nodeHeight = ((canvas.MaxHeight - _preferences.Layers.Title.Height) / _maxNodes) - (_preferences.Margins + _preferences.Margins / _maxNodes);
-            int y = ((canvas.MaxHeight - _preferences.Layers.Title.Height) - (nodeHeight * this.Element.GetAllNodes().Count())) / 2;
-            var minimumY = _preferences.Layers.Title.Height + _preferences.Margins;
-            y = (y < minimumY ? minimumY : y);
+            int y = _cache.StartingY + (_cache.TotalNodesHeight - _cache.NodeHeight * this.Element.GetAllNodes().Count()) / 2;
 
             if (this.Element.Bias != null)
             {
                 var biasDrawing = new BiasDrawing(this.Element.Bias, _preferences, _biasCache);
                 _nodesDrawing.Add(biasDrawing);
 
-                y = DrawNode(biasDrawing, canvas, y, nodeWidth, nodeHeight);
+                y = DrawNode(biasDrawing, canvas, y);
             }
 
             foreach (var node in this.Element.Nodes)
@@ -69,17 +65,18 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
                 var nodeDrawing = CreateDrawingNode(node);
                 _nodesDrawing.Add(nodeDrawing);
 
-                y = DrawNode(nodeDrawing, canvas, y, nodeWidth, nodeHeight);
+                y = DrawNode(nodeDrawing, canvas, y);
             }
         }
 
-        private int DrawNode(INodeDrawing nodeDrawing, ICanvas parentCanvas, int y, int nodeWidth, int nodeHeight)
+        private int DrawNode(INodeDrawing nodeDrawing, ICanvas parentCanvas, int y)
         {
-            var newCanvas = new NestedCanvas(new Rectangle(0, y, nodeWidth, nodeHeight), parentCanvas);
+            var newCanvas = new NestedCanvas(new Rectangle(0, y, _cache.NodeWidth, _cache.NodeEllipseHeight), parentCanvas);
             nodeDrawing.Draw(newCanvas);
 
-            return y + nodeHeight + _preferences.Margins;
+            return y + _cache.NodeHeight;
         }
+
         private void DrawTitle(ICanvas canvas)
         {
             if (_preferences.Layers.Title.Height <= 0)

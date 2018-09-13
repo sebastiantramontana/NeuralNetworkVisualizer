@@ -1,5 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
-using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
 
@@ -21,7 +21,7 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _outputValueFormatter = value;
         }
 
-        private Pen _border = Pens.Black;
+        private Pen _border = new Pen(Color.Black);
         /// <summary>
         /// The Pen for border: Don't use a System Pen, but clone it!
         /// </summary>

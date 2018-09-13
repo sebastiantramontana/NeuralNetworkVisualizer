@@ -44,10 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Destroy.cs" />
-    <Compile Include="Drawing\Cache\EdgeSizesCache.cs" />
-    <Compile Include="Drawing\Cache\NodeSizesCache.cs" />
-    <Compile Include="Drawing\Cache\PerceptronSizesCache.cs" />
-    <Compile Include="Drawing\Cache\SimpleNodeSizesCache.cs" />
+    <Compile Include="Drawing\PreCalc\EdgeSizesPreCalc.cs" />
+    <Compile Include="Drawing\PreCalc\LayerSizesPreCalc.cs" />
+    <Compile Include="Drawing\PreCalc\NodeSizesPreCalc.cs" />
+    <Compile Include="Drawing\PreCalc\PerceptronSizesPreCalc.cs" />
+    <Compile Include="Drawing\PreCalc\SimpleNodeSizesPreCalc.cs" />
     <Compile Include="Drawing\Canvas\ICanvas.cs" />
     <Compile Include="Drawing\Canvas\NestedCanvas.cs" />
     <Compile Include="Drawing\Canvas\GraphicsCanvas.cs" />
@@ -79,11 +80,11 @@
     <Compile Include="Model\Nodes\Input.cs" />
     <Compile Include="Model\Nodes\NodeBase.cs" />
     <Compile Include="Model\Nodes\Perceptron.cs" />
-    <Compile Include="NeuralNetworkViewerControl.cs">
+    <Compile Include="NeuralNetworkViewerVisualizer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NeuralNetworkViewerControl.Designer.cs">
-      <DependentUpon>NeuralNetworkViewerControl.cs</DependentUpon>
+    <Compile Include="NeuralNetworkViewerVisualizer.Designer.cs">
+      <DependentUpon>NeuralNetworkViewerVisualizer.cs</DependentUpon>
     </Compile>
     <Compile Include="Preferences\Brushes\GradientBrushPreference.cs" />
     <Compile Include="Preferences\Brushes\IBrushPreference.cs" />
@@ -126,8 +127,8 @@
     <None Include="img\tanh.emf" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NeuralNetworkViewerControl.resx">
-      <DependentUpon>NeuralNetworkViewerControl.cs</DependentUpon>
+    <EmbeddedResource Include="NeuralNetworkViewerVisualizer.resx">
+      <DependentUpon>NeuralNetworkViewerVisualizer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

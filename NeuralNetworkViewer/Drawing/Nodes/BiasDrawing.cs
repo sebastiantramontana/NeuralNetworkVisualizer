@@ -11,7 +11,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
 {
     internal class BiasDrawing : SimpleNodeDrawing<Bias>
     {
-        internal BiasDrawing(Bias element, Preference preferences, SimpleNodeSizesCache cache) : base(element, preferences.Biases, cache)
+        internal BiasDrawing(Bias element, Preference preferences, SimpleNodeSizesPreCalc cache) : base(element, preferences.Biases, cache)
         {
         }
     }

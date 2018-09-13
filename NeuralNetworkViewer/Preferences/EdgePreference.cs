@@ -1,4 +1,4 @@
-﻿using NeuralNetworkVisualizer.Preferences.Formatting;
+﻿using NeuralNetworkVisualizer.Preferences.Text;
 using System.Drawing;
 
 namespace NeuralNetworkVisualizer.Preferences

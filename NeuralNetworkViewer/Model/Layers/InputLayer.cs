@@ -35,7 +35,7 @@ namespace NeuralNetworkVisualizer.Model.Layers
             return Find(id) as TElement;
         }
 
-        public int GetMaxNodesInLayer()
+        public int GetMaxNodeCountInLayer()
         {
             int max = 0;
 
@@ -50,7 +50,7 @@ namespace NeuralNetworkVisualizer.Model.Layers
             return max;
         }
 
-        public int CountLayers()
+        public int LayersCount()
         {
             int count = 0;
 

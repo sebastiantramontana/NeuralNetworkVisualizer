@@ -1,6 +1,6 @@
 ﻿namespace NeuralNetworkVisualizer.Drawing.Cache
 {
-    internal class EdgeSizesCache
+    internal class EdgeSizesPreCalc
     {
         internal void Initialize(int totalWidth, double widthPortion, int textWidth)
         {

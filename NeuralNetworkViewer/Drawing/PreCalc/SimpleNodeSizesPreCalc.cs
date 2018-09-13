@@ -1,6 +1,6 @@
 ﻿namespace NeuralNetworkVisualizer.Drawing.Cache
 {
-    internal class SimpleNodeSizesCache : NodeSizesCache
+    internal class SimpleNodeSizesPreCalc : NodeSizesPreCalc
     {
         internal double YCenteringOffeset { get; set; }
     }

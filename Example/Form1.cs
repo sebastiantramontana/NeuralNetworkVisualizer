@@ -2,10 +2,9 @@
 using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences.Brushes;
-using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -46,6 +45,7 @@ namespace WindowsFormsApp1
             );
 
             NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
+            NeuralNetworkVisualizerControl1.Preferences.Layers = null;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -58,6 +58,7 @@ namespace WindowsFormsApp1
             _input.AddNode(new Input("e2") { OutputValue = 0.455 });
             _input.AddNode(new Input("e3") { OutputValue = -0.78967656 });
             _input.AddNode(new Input("e4") { OutputValue = 0.0 });
+            _input.AddNode(new Input("e5") { OutputValue = 40.03 });
 
             var hidden = new PerceptronLayer("Hidden");
 

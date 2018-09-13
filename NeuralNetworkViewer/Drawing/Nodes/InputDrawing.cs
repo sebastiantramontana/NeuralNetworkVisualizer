@@ -11,7 +11,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
 {
     internal class InputDrawing : SimpleNodeDrawing<Input>
     {
-        internal InputDrawing(Input element, Preference preferences, SimpleNodeSizesCache cache) : base(element, preferences.Inputs, cache)
+        internal InputDrawing(Input element, Preference preferences, SimpleNodeSizesPreCalc cache) : base(element, preferences.Inputs, cache)
         {
         }
     }
