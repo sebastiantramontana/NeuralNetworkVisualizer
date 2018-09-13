@@ -13,10 +13,10 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         private readonly IDictionary<NodeBase, INodeDrawing> _previousNodes;
         private readonly ICanvas _edgesCanvas;
         private readonly Preference _preferences;
-        private readonly PerceptronSizesCache _perceptronCache;
-        private readonly EdgeSizesCache _edgesCache;
+        private readonly PerceptronSizesPreCalc _perceptronCache;
+        private readonly EdgeSizesPreCalc _edgesCache;
 
-        internal PerceptronLayerDrawing(PerceptronLayer layer, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, int maxNodes, Preference preferences, PerceptronSizesCache perceptronCache, SimpleNodeSizesCache biasCache, EdgeSizesCache edgesCache) : base(layer, maxNodes, preferences, biasCache)
+        internal PerceptronLayerDrawing(PerceptronLayer layer, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, Preference preferences, LayerSizesPreCalc cache, PerceptronSizesPreCalc perceptronCache, SimpleNodeSizesPreCalc biasCache, EdgeSizesPreCalc edgesCache) : base(layer,  preferences, cache, biasCache)
         {
             _previousNodes = previousNodes;
             _edgesCanvas = edgesCanvas;

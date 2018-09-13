@@ -16,8 +16,8 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly IDictionary<NodeBase, INodeDrawing> _previousNodes;
         private readonly ICanvas _edgesCanvas;
         private readonly Preference _preferences;
-        private readonly PerceptronSizesCache _cache;
-        private readonly EdgeSizesCache _edgesCache;
+        private readonly PerceptronSizesPreCalc _cache;
+        private readonly EdgeSizesPreCalc _edgesCache;
 
         private static IDictionary<ActivationFunction, Image> _activationFunctionImageCache;
 
@@ -27,7 +27,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             PreloadActivationFunctionImages();
         }
 
-        internal PerceptronDrawing(Perceptron element, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, Preference preferences, PerceptronSizesCache cache, EdgeSizesCache edgesCache) : base(element, preferences.Perceptrons, cache)
+        internal PerceptronDrawing(Perceptron element, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, Preference preferences, PerceptronSizesPreCalc cache, EdgeSizesPreCalc edgesCache) : base(element, preferences.Perceptrons, cache)
         {
             _previousNodes = previousNodes;
             _edgesCanvas = edgesCanvas;
@@ -41,8 +41,6 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             var sizesPositions = GetSizePositions(rect);
 
             var roundingDigits = _preferences.Perceptrons.RoundingDigits;
-            //var perceptronFont = _preferences.Perceptrons.Text.CreateFontInfo();
-            //var fontFormatPreference = _preferences.Perceptrons.Text.Format;
 
             if (this.Element.SumValue.HasValue)
             {
@@ -96,7 +94,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             var valuesX = (rect.X + side / 2) - (_cache.SumSize.Width / 2);
 
             var activationFunctionPosition = _cache.GetActivationFunctionPosition(rect);
-            var sumRectangle = new Rectangle(new Point(valuesX, (activationFunctionPosition.Y - _cache.SumSize.Height) - _preferences.Margins), _cache.SumSize);
+            var sumRectangle = new Rectangle(new Point(valuesX, (activationFunctionPosition.Y - _cache.SumSize.Height) - _preferences.NodeMargins), _cache.SumSize);
             var outputRectangle = new Rectangle(new Point(valuesX, _cache.GetOutputPositionY(rect.Y)), _cache.OutputSize.Value);
 
             return (sumRectangle, activationFunctionPosition, _cache.ActivationFunctionSize, outputRectangle, inputPosition);

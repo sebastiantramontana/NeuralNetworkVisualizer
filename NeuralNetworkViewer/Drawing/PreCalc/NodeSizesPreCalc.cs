@@ -2,7 +2,7 @@
 
 namespace NeuralNetworkVisualizer.Drawing.Cache
 {
-    internal abstract class NodeSizesCache
+    internal abstract class NodeSizesPreCalc
     {
         internal Rectangle? EllipseRectangle { get; set; }
         internal Size? OutputSize { get; set; }

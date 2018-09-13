@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NeuralNetworkVisualizer.Preferences.Formatting
+namespace NeuralNetworkVisualizer.Preferences.Text
 {
     public class Formatter<T>
     {

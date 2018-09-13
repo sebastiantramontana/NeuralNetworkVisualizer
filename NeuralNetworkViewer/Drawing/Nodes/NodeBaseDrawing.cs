@@ -17,9 +17,9 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
     internal abstract class NodeBaseDrawing<TNode> : DrawingBase<TNode>, INodeDrawing where TNode : NodeBase
     {
         private readonly NodePreference _preferences;
-        private readonly NodeSizesCache _cache;
+        private readonly NodeSizesPreCalc _cache;
 
-        internal NodeBaseDrawing(TNode element, NodePreference preferences, NodeSizesCache cache) : base(element)
+        internal NodeBaseDrawing(TNode element, NodePreference preferences, NodeSizesPreCalc cache) : base(element)
         {
             _preferences = preferences;
             _cache = cache;

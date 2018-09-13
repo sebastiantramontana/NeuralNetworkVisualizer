@@ -3,11 +3,11 @@ using System.Drawing;
 
 namespace NeuralNetworkVisualizer.Drawing.Cache
 {
-    internal class PerceptronSizesCache : NodeSizesCache
+    internal class PerceptronSizesPreCalc : NodeSizesPreCalc
     {
         private readonly Preference _preferences;
 
-        public PerceptronSizesCache(Preference preferences)
+        public PerceptronSizesPreCalc(Preference preferences)
         {
             _preferences = preferences;
         }
@@ -19,7 +19,7 @@ namespace NeuralNetworkVisualizer.Drawing.Cache
             {
                 if (!_sumSize.HasValue)
                 {
-                    var valuesHeight = this.Div3 / 2 - _preferences.Margins;
+                    var valuesHeight = this.Div3 / 2 - _preferences.NodeMargins;
                     var valuesWidth = valuesHeight * 5.23; //buena proporción
                     _sumSize = new Size((int)valuesWidth, (int)valuesHeight);
                 }
@@ -79,7 +79,7 @@ namespace NeuralNetworkVisualizer.Drawing.Cache
         {
             if (!_ouputPositionYOffset.HasValue)
             {
-                _ouputPositionYOffset = this.Div3 * 2 + _preferences.Margins;
+                _ouputPositionYOffset = this.Div3 * 2 + _preferences.NodeMargins;
             }
 
             return (int)(fromY + _ouputPositionYOffset.Value);

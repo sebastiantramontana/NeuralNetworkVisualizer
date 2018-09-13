@@ -25,11 +25,11 @@ namespace NeuralNetworkVisualizer
             this.BackColor = Color.White;
         }
 
-        private Preference _Preferences = new Preference();
+        private Preference _preferences = new Preference();
         [Browsable(false)]
         public Preference Preferences
         {
-            get { return _Preferences; }
+            get { return _preferences; }
         }
 
         private InputLayer _InputLayer = null;
@@ -65,6 +65,9 @@ namespace NeuralNetworkVisualizer
 
         public void Redraw()
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (picCanvas.Image != null)
             {
                 picCanvas.Image.Dispose();
@@ -73,16 +76,14 @@ namespace NeuralNetworkVisualizer
 
             if (_InputLayer == null)
             {
-                picCanvas.Size = this.Size;
+                picCanvas.ClientSize = this.ClientSize;
                 return;
             }
 
-            picCanvas.Size = new Size((int)(_zoom * this.ClientSize.Width - 1), (int)(_zoom * this.ClientSize.Height - 1));
+            picCanvas.Size = new Size((int)(_zoom * this.ClientSize.Width), (int)(_zoom * this.ClientSize.Height));
 
             Bitmap bmp = new Bitmap(picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
             Graphics graph = Graphics.FromImage(bmp);
-
-            graph.ScaleTransform(_zoom, _zoom);
 
             graph.Clear(this.BackColor);
             SetQuality(graph);
@@ -96,7 +97,7 @@ namespace NeuralNetworkVisualizer
         private Size _previousSize = Size.Empty;
         protected override void OnSizeChanged(EventArgs e)
         {
-            if (!this.ClientRectangle.Size.IsEmpty)
+            if (!this.ClientSize.IsEmpty)
             {
                 if (!_previousSize.IsEmpty)
                 {
@@ -104,13 +105,13 @@ namespace NeuralNetworkVisualizer
                 }
             }
 
-            _previousSize = this.ClientRectangle.Size;
+            _previousSize = this.ClientSize;
             base.OnSizeChanged(e);
         }
 
         private void ValidateModel(InputLayer inputLayer)
         {
-            if(inputLayer==null)
+            if (inputLayer == null)
             {
                 ///it's right! InputLayer can be null.
                 return;
@@ -123,7 +124,9 @@ namespace NeuralNetworkVisualizer
                 throw new MissingOutputException(inputLayer);
             }
 
-            if(outputlayer.Bias!=null)
+            ///Bias doesn´t make sense to be in the output layer
+            ///TODO: Fix Model, make an OutputLayer
+            if (outputlayer.Bias != null)
             {
                 throw new InvalidOutputBiasException(outputlayer);
             }
@@ -139,7 +142,7 @@ namespace NeuralNetworkVisualizer
 
         private void SetQuality(Graphics graphics)
         {
-            switch (_Preferences.Quality)
+            switch (_preferences.Quality)
             {
                 case RenderQuality.Low:
                     graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
@@ -163,58 +166,59 @@ namespace NeuralNetworkVisualizer
                     graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
                     break;
                 default:
-                    break;
+                    throw new InvalidOperationException($"Quality not implemented: {_preferences.Quality}");
             }
         }
 
         private void DrawLayers(Graphics graph)
         {
-            var layersSize = GetLayersSize();
-            var graphCanvas = new GraphicsCanvas(graph, this.ClientSize.Width, this.ClientSize.Height);
-            int x = this.Preferences.Margins;
-            var maxNodes = _InputLayer.GetMaxNodesInLayer();
+            var layersDrawingSize = GetLayersDrawingSize();
+            var graphCanvas = new GraphicsCanvas(graph, picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
+            int x = 0;
 
             IDictionary<NodeBase, INodeDrawing> previousNodesDic = new Dictionary<NodeBase, INodeDrawing>();
-            SimpleNodeSizesCache simpleNodesCache = new SimpleNodeSizesCache();
-            PerceptronSizesCache perceptronCache = new PerceptronSizesCache(this.Preferences);
-            EdgeSizesCache edgesCache = new EdgeSizesCache();
+
+            LayerSizesPreCalc layersCache = new LayerSizesPreCalc(layersDrawingSize, _InputLayer.GetMaxNodeCountInLayer(), _preferences);
+            SimpleNodeSizesPreCalc simpleNodesCache = new SimpleNodeSizesPreCalc();
+            PerceptronSizesPreCalc perceptronCache = new PerceptronSizesPreCalc(_preferences);
+            EdgeSizesPreCalc edgesCache = new EdgeSizesPreCalc();
 
             for (LayerBase layer = _InputLayer; layer != null; layer = layer.Next)
             {
-                var canvasRect = new Rectangle(x, this.Preferences.Margins, layersSize.Width, layersSize.Height);
+                var canvasRect = new Rectangle(x, 0, layersDrawingSize.Width, layersDrawingSize.Height);
                 var layerCanvas = new NestedCanvas(canvasRect, graphCanvas);
 
                 ILayerDrawing layerDrawing = null;
 
                 if (layer == _InputLayer)
                 {
-                    layerDrawing = new InputLayerDrawing(layer as InputLayer, this.Preferences, simpleNodesCache);
+                    layerDrawing = new InputLayerDrawing(layer as InputLayer, _preferences, layersCache, simpleNodesCache);
                 }
                 else
                 {
-                    layerDrawing = new PerceptronLayerDrawing(layer as PerceptronLayer, previousNodesDic, graphCanvas, maxNodes, this.Preferences, perceptronCache, simpleNodesCache, edgesCache);
+                    layerDrawing = new PerceptronLayerDrawing(layer as PerceptronLayer, previousNodesDic, graphCanvas, _preferences, layersCache, perceptronCache, simpleNodesCache, edgesCache);
                 }
 
                 layerDrawing.Draw(layerCanvas);
                 previousNodesDic = layerDrawing.NodesDrawing.ToDictionary(n => n.Node, n => n);
 
-                x += layersSize.Width;
+                x += layersDrawingSize.Width - 1;
             }
         }
 
-        private Size GetLayersSize()
+        private Size GetLayersDrawingSize()
         {
-            var countLayers = _InputLayer.CountLayers();
+            var layersCount = _InputLayer.LayersCount();
 
-            var layerWidth = this.ClientSize.Width / countLayers - (_Preferences.Margins * 2);
-            var layerWWeight = this.ClientSize.Height - (_Preferences.Margins * 2);
+            var layerWidth = picCanvas.ClientSize.Width / layersCount;
+            var layerHeight = picCanvas.ClientSize.Height;
 
-            return new Size(layerWidth, layerWWeight);
+            return new Size(layerWidth, layerHeight);
         }
 
         protected override void Dispose(bool disposing)
         {
-            Destroy.Disposable(ref this._Preferences);
+            Destroy.Disposable(ref _preferences);
             PerceptronDrawing.DestroyActivationFunctionImagesCache();
 
             if (disposing && (components != null))
