@@ -6,7 +6,7 @@ Easy neural network visualizer control for .Net
 ![Little Size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalLittle.PNG)
 ![Layers Titles](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalWithTitles.PNG)
 ![Several Nodes](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodes.PNG)
-![Zoomed](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodesZoomed.PNG)
+![Zoomed](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodesZoomed.png)
 
 ## Example
 
