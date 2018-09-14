@@ -1,25 +1,62 @@
 # NeuralNetworkVisualizer
 Easy neural network visualizer control for .Net
 
-## Screenshot: Regular
-![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen4.PNG)
-![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/ConditionalValueFormat/docs/screen_format2.PNG)
-
-**With layer titles**
-![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen1.PNG)
-![Regular](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/FormattingElements/docs/screen_connector_format.PNG)
-
-## Depending on objects size, labels can be hidden
-
-**Screenshot: Auto sized**
-![Auto size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen2.PNG)
-
-**Screenshot: Auto sized**
-![Auto size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/screen3.PNG)
+## Screenshots
+![Normal](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/Normal.PNG)
+![Little Size](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalLittle.PNG)
+![Layers Titles](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalWithTitles.PNG)
+![Several Nodes](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodes.PNG)
+![Zoomed](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodesZoomed.PNG)
 
 ## Example
 
 ```C#
+            /******** Configure Preferences: ********/
+
+            //Font, Colors, etc.
+            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new Formatter<TextPreference>(
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+            );
+
+            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new Formatter<TextPreference>(
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+            );
+
+            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new Formatter<TextPreference>(
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+            );
+
+            NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
+
+            //Graphics quality
+            NeuralNetworkVisualizerControl1.Preferences.Quality = RenderQuality.High; //Low, Medium, High. Medium is default
+
+            //To remove layer titles
+            //NeuralNetworkVisualizerControl1.Preferences.Layers = null;
+
+            //** NOTE: ** Preferences setting don't redraw the control automatically. If you need to redraw the current rendered NN, call to Redraw() method after all setting 
+            //NeuralNetworkVisualizerControl1.Redraw();
+
+
+            
+            /***** Some Functionalities *****/
+
+            //Adjust zoom
+            NeuralNetworkVisualizerControl1.Zoom = 2.0f; //1.0 is 'normal' and default, fit the whole drawing to control size
+
+            //Get the current rendered NN to save to disk or whatever
+            Image img = NeuralNetworkVisualizerControl1.Image;
+
+
+
+            /*************** Set the NN model *****************/
+
             var _input = new InputLayer("Input")
             {
                 Bias = new Bias("bias") { OutputValue = 1.234 }
@@ -35,7 +72,7 @@ Easy neural network visualizer control for .Net
             hidden.AddNode(new Perceptron("o2") { ActivationFunction = ActivationFunction.Tanh, OutputValue = 0.552, SumValue = 55.44 });
             hidden.AddNode(new Perceptron("o3") { ActivationFunction = ActivationFunction.Sigmoid, OutputValue = 0.876545, SumValue = 11.22 });
 
-            _input.Connect(hidden);
+            _input.Connect(hidden); //Connect(...) method creates nodes connections
 
             var output = new PerceptronLayer("Output");
             output.AddNode(new Perceptron("s1") { ActivationFunction = ActivationFunction.BinaryStep, OutputValue = 0.78967656, SumValue = 0.5544 });
@@ -61,4 +98,5 @@ Easy neural network visualizer control for .Net
                 }
             }
 
-            NeuralNetworkVisualizerControl1.InputLayer = _input;
+            NeuralNetworkVisualizerControl1.InputLayer = _input; //Automatic rendering
+            //NeuralNetworkVisualizerControl1.InputLayer = null; //Leave blank when needed
