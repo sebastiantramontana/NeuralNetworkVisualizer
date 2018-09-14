@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NeuralNetworkVisualizer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Easy neural network visualizer winform control for .Net")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Sebastian Tramontana")]
 [assembly: AssemblyProduct("NeuralNetworkVisualizer")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
