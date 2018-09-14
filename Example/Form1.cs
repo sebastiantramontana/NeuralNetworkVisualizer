@@ -47,7 +47,7 @@ namespace WindowsFormsApp1
             NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
 
             //To remove layer titles
-            //NeuralNetworkVisualizerControl1.Preferences.Layers = null;
+            NeuralNetworkVisualizerControl1.Preferences.Layers = null;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -61,19 +61,32 @@ namespace WindowsFormsApp1
             _input.AddNode(new Input("e2") { OutputValue = 0.455 });
             _input.AddNode(new Input("e3") { OutputValue = -0.78967656 });
             _input.AddNode(new Input("e4") { OutputValue = 0.0 });
-            
+            _input.AddNode(new Input("e5") { OutputValue = 0.255 });
+            //_input.AddNode(new Input("e6") { OutputValue = 0.455 });
+            //_input.AddNode(new Input("e7") { OutputValue = -0.78967656 });
+            //_input.AddNode(new Input("e8") { OutputValue = 0.011 });
+            //_input.AddNode(new Input("e9") { OutputValue = 0.2255 });
+            //_input.AddNode(new Input("e10") { OutputValue = 43.455 });
+            //_input.AddNode(new Input("e11") { OutputValue = -11.67656 });
+            //_input.AddNode(new Input("e12") { OutputValue = -1.001 });
+
             var hidden = new PerceptronLayer("Hidden");
 
             hidden.AddNode(new Perceptron("o1") { ActivationFunction = ActivationFunction.LeakyRelu, OutputValue = 2.364, SumValue = 2.364 });
             hidden.AddNode(new Perceptron("o2") { ActivationFunction = ActivationFunction.Tanh, OutputValue = -0.552, SumValue = 55.44 });
             hidden.AddNode(new Perceptron("o3") { ActivationFunction = ActivationFunction.Sigmoid, OutputValue = 0.0, SumValue = 19.22 });
-            
+            //hidden.AddNode(new Perceptron("o4") { ActivationFunction = ActivationFunction.LeakyRelu, OutputValue = 1.324, SumValue = 4.34 });
+            //hidden.AddNode(new Perceptron("o5") { ActivationFunction = ActivationFunction.Tanh, OutputValue = -0.12, SumValue = 25.224 });
+            //hidden.AddNode(new Perceptron("o6") { ActivationFunction = ActivationFunction.Sigmoid, OutputValue = 10.3, SumValue = 1.222 });
+
             _input.Connect(hidden);
 
             var output = new PerceptronLayer("Output");
-            output.AddNode(new Perceptron("s1") { ActivationFunction = ActivationFunction.Linear, OutputValue = 0.78967656, SumValue = 0.454 });
-            output.AddNode(new Perceptron("s2") { ActivationFunction = ActivationFunction.Softmax, OutputValue = 0.876545, SumValue = 0.544 });
-            
+            output.AddNode(new Perceptron("s1") { ActivationFunction = ActivationFunction.Linear, OutputValue = 0.567656, SumValue = 0.454 });
+            output.AddNode(new Perceptron("s2") { ActivationFunction = ActivationFunction.Softmax, OutputValue = 0.176545, SumValue = 0.54 });
+            //output.AddNode(new Perceptron("s3") { ActivationFunction = ActivationFunction.Softmax, OutputValue = 0.9545, SumValue = 0.133 });
+            //output.AddNode(new Perceptron("s4") { ActivationFunction = ActivationFunction.Softmax, OutputValue = 0.145, SumValue = 0.88 });
+
             hidden.Connect(output);
 
             var aleatorio = new Random(2);
