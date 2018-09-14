@@ -1,5 +1,5 @@
 # NeuralNetworkVisualizer
-Easy neural network visualizer control for .Net
+Easy neural network visualizer winform control for .Net
 
 ## Screenshots
 ![Normal](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/Normal.PNG)
