@@ -226,3 +226,6 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 /NeuralNetworkViewer/*.nuspec
+/Example/bin/Release
+/Example/bin/Release/WindowsFormsApp1.exe.config
+/Example/obj/Release/WindowsFormsApp1.Form1.resources
