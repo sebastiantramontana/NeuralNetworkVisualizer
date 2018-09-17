@@ -52,34 +52,29 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
 
         private (Rectangle TextRectangle, float Angle) GetSizesPositions()
         {
-            if (!_cache.IsInitilized)
-            {
-                int totalWidth = _toPosition.X - _fromPosition.X;
-                double xOffset = (totalWidth - totalWidth / 3);
-                double widthPortion = xOffset / totalWidth;
-
-                int textWidth = (int)(totalWidth / 4d);
-
-                _cache.Initialize(totalWidth, widthPortion, textWidth);
-            }
-
             int totalHeight = _toPosition.Y - _fromPosition.Y;
+            var sizePosValues = _cache.GetValues(_fromPosition.X, _toPosition.X);
 
             int y;
-            if (totalHeight > 0)
+            int x;
+            float angle = (float)(Math.Atan2(totalHeight, sizePosValues.TotalWidth) * (180d / Math.PI));
+
+            if (angle >= 0) //it depends on connector angle
             {
-                y = (int)(_fromPosition.Y + Math.Round(_cache.WidthPortion * totalHeight));
+                y = (int)(_fromPosition.Y + sizePosValues.WidthPortionNear * totalHeight);
+                x = sizePosValues.NearX;
             }
             else
             {
-                var totalHeightPositive = totalHeight * -1; //make positive
-                y = (int)(_toPosition.Y + Math.Round(totalHeightPositive - (_cache.WidthPortion * totalHeightPositive)));
+                var totalHeightPositive = totalHeight * -1; //turn positive
+                y = (int)(_toPosition.Y + Math.Round(totalHeightPositive - (sizePosValues.WidthPortionFar * totalHeightPositive)));
+                x = sizePosValues.FarX;
             }
 
-            float angle = (float)(Math.Atan2(totalHeight, _cache.TotalWidth) * (180d / Math.PI));
-            int x = (int)(_toPosition.X - (_cache.TotalWidth / 3d));
+            
 
-            return (new Rectangle(x, y, _cache.TextWidth, _textHeight), angle);
+
+            return (new Rectangle(x, y, sizePosValues.TextWidth, _textHeight), angle);
         }
     }
 }

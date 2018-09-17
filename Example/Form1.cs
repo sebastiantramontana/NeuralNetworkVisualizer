@@ -47,7 +47,7 @@ namespace WindowsFormsApp1
             NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
 
             //To remove layer titles
-            NeuralNetworkVisualizerControl1.Preferences.Layers = null;
+            //NeuralNetworkVisualizerControl1.Preferences.Layers = null;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
