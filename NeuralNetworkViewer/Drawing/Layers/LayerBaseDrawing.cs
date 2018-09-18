@@ -55,26 +55,28 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
             if (this.Element.Bias != null)
             {
                 var biasDrawing = new BiasDrawing(this.Element.Bias, _preferences, _biasCache);
-                _nodesDrawing.Add(biasDrawing);
-
-                y = DrawNode(biasDrawing, canvas, y);
+                InternalDrawNode(biasDrawing);
             }
 
             foreach (var node in this.Element.Nodes)
             {
                 var nodeDrawing = CreateDrawingNode(node);
+                InternalDrawNode(nodeDrawing);
+            }
+
+            void InternalDrawNode(INodeDrawing nodeDrawing)
+            {
                 _nodesDrawing.Add(nodeDrawing);
 
-                y = DrawNode(nodeDrawing, canvas, y);
+                DrawNode(nodeDrawing, canvas, y);
+                y += _cache.NodeHeight;
             }
         }
 
-        private int DrawNode(INodeDrawing nodeDrawing, ICanvas parentCanvas, int y)
+        private void DrawNode(INodeDrawing nodeDrawing, ICanvas parentCanvas, int y)
         {
             var newCanvas = new NestedCanvas(new Rectangle(0, y, _cache.NodeWidth, _cache.NodeEllipseHeight), parentCanvas);
             nodeDrawing.Draw(newCanvas);
-
-            return y + _cache.NodeHeight;
         }
 
         private void DrawTitle(ICanvas canvas)

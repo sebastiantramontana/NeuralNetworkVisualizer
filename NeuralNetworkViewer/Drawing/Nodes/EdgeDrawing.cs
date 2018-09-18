@@ -71,9 +71,6 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
                 x = sizePosValues.FarX;
             }
 
-            
-
-
             return (new Rectangle(x, y, sizePosValues.TextWidth, _textHeight), angle);
         }
     }
