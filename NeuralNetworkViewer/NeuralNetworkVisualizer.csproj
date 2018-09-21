@@ -110,39 +110,17 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="img\leaky_relu.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\linear.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\relu.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\sigmoide.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\softmax.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\step.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\tanh.emf" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="NeuralNetworkViewerVisualizer.resx">
       <DependentUpon>NeuralNetworkViewerVisualizer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.ico" />
-    <None Include="img\none.emf" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

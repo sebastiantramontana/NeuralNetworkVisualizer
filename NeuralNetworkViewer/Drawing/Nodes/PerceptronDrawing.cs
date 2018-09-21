@@ -3,11 +3,9 @@ using NeuralNetworkVisualizer.Drawing.Canvas;
 using NeuralNetworkVisualizer.Model;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences;
-using NeuralNetworkVisualizer.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 
 namespace NeuralNetworkVisualizer.Drawing.Nodes
 {
@@ -18,14 +16,6 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly Preference _preferences;
         private readonly PerceptronSizesPreCalc _cache;
         private readonly EdgeSizesPreCalc _edgesCache;
-
-        private static IDictionary<ActivationFunction, Image> _activationFunctionImageCache;
-
-        static PerceptronDrawing()
-        {
-            _activationFunctionImageCache = new Dictionary<ActivationFunction, Image>(8);
-            PreloadActivationFunctionImages();
-        }
 
         internal PerceptronDrawing(Perceptron element, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, Preference preferences, PerceptronSizesPreCalc cache, EdgeSizesPreCalc edgesCache) : base(element, preferences.Perceptrons, cache)
         {
@@ -47,7 +37,6 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
                 using (var sumFormat = _preferences.Perceptrons.SumValueFormatter.GetFormat(this.Element.SumValue.Value))
                 using (var sumBrushFontPreference = sumFormat.Brush.CreateBrush())
                 {
-
                     canvas.DrawText('\u2211' + " " + Math.Round(this.Element.SumValue.Value, roundingDigits).ToString(), sumFormat.CreateFontInfo(), sizesPositions.SumRectangle, sumBrushFontPreference, sumFormat.Format);
                 }
             }
@@ -102,87 +91,94 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
 
         private void DrawActivationFunction(Point position, Size size, ICanvas canvas)
         {
-            if (size.Width > 8 && size.Height > 8)
+            if (size.Width <= 8 || size.Height <= 8)
             {
-                var bmp = GetActivationFunctionImage(this.Element.ActivationFunction);
-                canvas.DrawImage(bmp, position, size);
-            }
-        }
-
-        internal static void DestroyActivationFunctionImagesCache()
-        {
-            if (_activationFunctionImageCache == null)
                 return;
-
-            foreach (var imgcache in _activationFunctionImageCache.Values)
-            {
-                if (imgcache != null)
-                    imgcache.Dispose();
             }
 
-            _activationFunctionImageCache.Clear();
-            _activationFunctionImageCache = null;
-        }
-
-        private static void PreloadActivationFunctionImages()
-        {
-            var actFuncs = Enum.GetValues(typeof(ActivationFunction));
-
-            foreach (var af in actFuncs)
+            switch (this.Element.ActivationFunction)
             {
-                PreloadActivationFunctionImage((ActivationFunction)af);
-            }
-        }
-
-        private static void PreloadActivationFunctionImage(ActivationFunction activationFunction)
-        {
-            byte[] bytes;
-
-            switch (activationFunction)
-            {
-                case ActivationFunction.None:
-                    bytes = Resources.None;
-                    break;
-                case ActivationFunction.BinaryStep:
-                    bytes = Resources.Step;
-                    break;
-                case ActivationFunction.Linear:
-                    bytes = Resources.Linear;
-                    break;
-                case ActivationFunction.Sigmoid:
-                    bytes = Resources.Sigmoide;
-                    break;
-                case ActivationFunction.Tanh:
-                    bytes = Resources.Tanh;
-                    break;
                 case ActivationFunction.Relu:
-                    bytes = Resources.Relu;
-                    break;
-                case ActivationFunction.LeakyRelu:
-                    bytes = Resources.LeakyRelu;
-                    break;
-                case ActivationFunction.Softmax:
-                    bytes = Resources.Softmax;
-                    break;
-                default:
-                    throw new InvalidOperationException("Inexistent icon for the following activation function: " + activationFunction);
-            }
+                    DrawStrokedActivationFunction(size, (pen, stroke) =>
+                    {
+                        canvas.DrawLine(new Point(position.X, (position.Y + size.Height) - stroke), new Point(position.X + size.Width / 2, (position.Y + size.Height) - stroke), pen);
+                        canvas.DrawLine(new Point(position.X + size.Width / 2 - stroke / 2, (position.Y + size.Height) - stroke), new Point((position.X + size.Width) - stroke, position.Y), pen);
 
-            using (var stream = new MemoryStream(bytes))
-            {
-                var image = new Bitmap(stream);
-                _activationFunctionImageCache.Add(activationFunction, image);
+                    });
+                    break;
+
+                case ActivationFunction.None:
+                    //Don't draw anything!
+                    break;
+
+                case ActivationFunction.BinaryStep:
+                    DrawStrokedActivationFunction(size, (pen, stroke) =>
+                    {
+                        canvas.DrawLine(new Point(position.X + size.Width / 2, position.Y + stroke / 2), new Point(position.X + size.Width, position.Y + stroke / 2), pen);
+                        canvas.DrawLine(new Point(position.X + size.Width / 2, position.Y), new Point(position.X + size.Width / 2, position.Y + size.Height), pen);
+                        canvas.DrawLine(new Point(position.X, position.Y + size.Height - stroke / 2), new Point(position.X + size.Width / 2, position.Y + size.Height - stroke / 2), pen);
+                    });
+                    break;
+
+                case ActivationFunction.Linear:
+                    DrawStrokedActivationFunction(size, (pen, stroke) =>
+                    {
+                        canvas.DrawLine(new Point(position.X, position.Y + size.Height), new Point(position.X + size.Width, position.Y), pen);
+                    });
+                    break;
+
+                case ActivationFunction.LeakyRelu:
+                    DrawStrokedActivationFunction(size, (pen, stroke) =>
+                    {
+                        canvas.DrawLine(new Point(position.X, (position.Y + size.Height) - stroke), new Point(position.X + size.Width / 2, (position.Y + size.Height - size.Height / 10) - stroke), pen);
+                        canvas.DrawLine(new Point(position.X + size.Width / 2 - stroke / 2, (position.Y + size.Height - size.Height / 10) - stroke), new Point((position.X + size.Width) - stroke, position.Y), pen);
+                    });
+                    break;
+
+                case ActivationFunction.Softmax:
+                    DrawStrokedActivationFunction(size, (pen, stroke) =>
+                    {
+                        var x_centered = position.X + size.Width / 2 - stroke / 2;
+
+                        canvas.DrawLine(new Point(x_centered - (int)(stroke * 0.5) - (int)(stroke * 1.5), position.Y), new Point(x_centered - (int)(stroke * 0.5) + (int)(stroke * 1.5), position.Y), pen);
+                        canvas.DrawLine(new Point(x_centered - (int)(stroke * 0.5), position.Y), new Point(x_centered - (int)(stroke * 0.5), position.Y + size.Height), pen);
+                        canvas.DrawLine(new Point(x_centered - (int)(stroke * 0.5) - (int)(stroke * 1.5), position.Y + size.Height), new Point(x_centered - (int)(stroke * 0.5) + (int)(stroke * 1.5), position.Y + size.Height), pen);
+                        canvas.DrawLine(new Point(x_centered + (int)(stroke * 2.5), position.Y + (int)(size.Height * 0.2)), new Point(x_centered + (int)(stroke * 2.5), position.Y + size.Height + stroke / 2), pen);
+                    });
+
+                    break;
+
+                case ActivationFunction.Sigmoid:
+                    DrawByCharActivationFunction('\u0283', "Tahoma", position, size, canvas);
+                    break;
+
+                case ActivationFunction.Tanh:
+                    DrawByCharActivationFunction('\u222B', "Cursiva", position, size, canvas);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Inexistent drawing for the following activation function: " + this.Element.ActivationFunction);
             }
         }
 
-        private static Image GetActivationFunctionImage(ActivationFunction activationFunction)
+        private void DrawStrokedActivationFunction(Size size, Action<Pen, int> drawAction)
         {
-            if (!_activationFunctionImageCache.TryGetValue(activationFunction, out Image image))
+            var stroke = Math.Min(size.Width, size.Height) / 15;
+            using (var pen = new Pen(Color.Black, stroke))
             {
-                throw new InvalidOperationException("Inexistent preloaded icon for the following activation function: " + activationFunction);
+                drawAction(pen, stroke);
             }
+        }
 
-            return image;
+        private void DrawByCharActivationFunction(char character, string fontfamily, Point position, Size size, ICanvas canvas)
+        {
+            var factor = size.Height / 5;
+            var factorSize = factor * 2 - factor / 3;
+
+            using (var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.None })
+            {
+                canvas.DrawText(character.ToString(), new FontInfo(fontfamily, FontStyle.Italic), new Rectangle(position.X - factor, position.Y - factor, size.Width + factorSize, size.Height + factorSize), Brushes.Black, format);
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NeuralNetworkVisualizer
@@ -61,17 +62,26 @@ namespace NeuralNetworkVisualizer
         }
 
         [Browsable(false)]
-        public Image Image { get => picCanvas.Image; }
+        public Image Image { get => SafeInvoke(() => picCanvas.Image.Clone() as Image); } //Clone for safe handling
 
         public void Redraw()
+        {
+            SafeInvoke(async () =>
+            {
+                await RedrawAsync();
+            });
+        }
+
+        public async Task RedrawAsync()
         {
             if (!this.IsHandleCreated)
                 return;
 
-            if (picCanvas.Image != null)
+            if (picCanvas.Image != null) //Clear before anything
             {
                 picCanvas.Image.Dispose();
                 picCanvas.Image = null;
+                picCanvas.BackColor = this.BackColor;
             }
 
             if (_InputLayer == null)
@@ -85,27 +95,27 @@ namespace NeuralNetworkVisualizer
             Bitmap bmp = new Bitmap(picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
             Graphics graph = Graphics.FromImage(bmp);
 
-            graph.Clear(this.BackColor);
             SetQuality(graph);
-            DrawLayers(graph);
+
+            await DrawLayers(graph);
 
             picCanvas.Image = bmp;
-
             Destroy.Disposable(ref graph);
         }
 
         private Size _previousSize = Size.Empty;
-        protected override void OnSizeChanged(EventArgs e)
+        protected async override void OnSizeChanged(EventArgs e)
         {
+            _previousSize = this.ClientSize;
+
             if (!this.ClientSize.IsEmpty)
             {
                 if (!_previousSize.IsEmpty)
                 {
-                    Redraw();
+                    await RedrawAsync();
                 }
             }
 
-            _previousSize = this.ClientSize;
             base.OnSizeChanged(e);
         }
 
@@ -170,7 +180,7 @@ namespace NeuralNetworkVisualizer
             }
         }
 
-        private void DrawLayers(Graphics graph)
+        private async Task DrawLayers(Graphics graph)
         {
             var layersDrawingSize = GetLayersDrawingSize();
             var graphCanvas = new GraphicsCanvas(graph, picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
@@ -185,9 +195,6 @@ namespace NeuralNetworkVisualizer
 
             for (LayerBase layer = _InputLayer; layer != null; layer = layer.Next)
             {
-                var canvasRect = new Rectangle(x, 0, layersDrawingSize.Width, layersDrawingSize.Height);
-                var layerCanvas = new NestedCanvas(canvasRect, graphCanvas);
-
                 ILayerDrawing layerDrawing = null;
 
                 if (layer == _InputLayer)
@@ -199,10 +206,19 @@ namespace NeuralNetworkVisualizer
                     layerDrawing = new PerceptronLayerDrawing(layer as PerceptronLayer, previousNodesDic, graphCanvas, _preferences, layersCache, perceptronCache, simpleNodesCache, edgesCache);
                 }
 
-                layerDrawing.Draw(layerCanvas);
+                var canvasRect = new Rectangle(x, 0, layersDrawingSize.Width, layersDrawingSize.Height);
+                var layerCanvas = new NestedCanvas(canvasRect, graphCanvas);
+
+                await Task.Factory.StartNew((object canvasLayerParam) =>
+                {
+                    var canvasLayer = canvasLayerParam as Tuple<ILayerDrawing, ICanvas>; //I prefer rather than ValueTuple
+                    SafeInvoke(() => { canvasLayer.Item1.Draw(canvasLayer.Item2); });
+
+                }, new Tuple<ILayerDrawing, ICanvas>(layerDrawing, layerCanvas));
+
                 previousNodesDic = layerDrawing.NodesDrawing.ToDictionary(n => n.Node, n => n);
 
-                x += layersDrawingSize.Width - 1;
+                x += layersDrawingSize.Width;
             }
         }
 
@@ -216,10 +232,26 @@ namespace NeuralNetworkVisualizer
             return new Size(layerWidth, layerHeight);
         }
 
+        private void SafeInvoke(Action action)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
+        private T SafeInvoke<T>(Func<T> action)
+        {
+            return (this.InvokeRequired ? (T)this.Invoke(action) : action());
+        }
+
         protected override void Dispose(bool disposing)
         {
             Destroy.Disposable(ref _preferences);
-            PerceptronDrawing.DestroyActivationFunctionImagesCache();
 
             if (disposing && (components != null))
             {

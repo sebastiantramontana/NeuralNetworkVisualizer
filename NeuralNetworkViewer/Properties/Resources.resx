@@ -117,29 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="LeakyRelu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\leaky_relu.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Linear" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\linear.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="None" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\none.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Relu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\relu.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Sigmoide" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\sigmoide.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Softmax" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\softmax.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Step" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\step.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Tanh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\tanh.emf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>

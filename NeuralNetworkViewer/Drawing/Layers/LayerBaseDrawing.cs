@@ -75,7 +75,7 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
 
         private void DrawNode(INodeDrawing nodeDrawing, ICanvas parentCanvas, int y)
         {
-            var newCanvas = new NestedCanvas(new Rectangle(0, y, _cache.NodeWidth, _cache.NodeEllipseHeight), parentCanvas);
+            var newCanvas = new NestedCanvas(new Rectangle(_preferences.NodeMargins, y, _cache.NodeWidth, _cache.NodeEllipseHeight), parentCanvas);
             nodeDrawing.Draw(newCanvas);
         }
 
