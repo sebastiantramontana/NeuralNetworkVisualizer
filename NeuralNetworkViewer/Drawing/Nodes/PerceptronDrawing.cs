@@ -149,11 +149,11 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
                     break;
 
                 case ActivationFunction.Sigmoid:
-                    DrawByCharActivationFunction('\u0283', "Tahoma", position, size, canvas);
+                    DrawByCharActivationFunction('\u0283', "verdana", position, size, canvas);
                     break;
 
                 case ActivationFunction.Tanh:
-                    DrawByCharActivationFunction('\u222B', "Cursiva", position, size, canvas);
+                    DrawByCharActivationFunction('\u222B', "Verdana", position, size, canvas);
                     break;
 
                 default:

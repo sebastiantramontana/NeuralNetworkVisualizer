@@ -20,6 +20,8 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            NeuralNetworkVisualizerControl1.Preferences.Quality = RenderQuality.High;
+
             cboQuality.Items.Add(RenderQuality.Low);
             cboQuality.Items.Add(RenderQuality.Medium);
             cboQuality.Items.Add(RenderQuality.High);
@@ -46,7 +48,7 @@ namespace WindowsFormsApp1
 
             NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
 
-            //To remove layer titles
+            //To remove layer's titles
             //NeuralNetworkVisualizerControl1.Preferences.Layers = null;
         }
 

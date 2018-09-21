@@ -95,6 +95,7 @@ namespace NeuralNetworkVisualizer
             Bitmap bmp = new Bitmap(picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
             Graphics graph = Graphics.FromImage(bmp);
 
+            graph.Clear(this.BackColor);
             SetQuality(graph);
 
             await DrawLayers(graph);
