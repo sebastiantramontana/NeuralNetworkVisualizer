@@ -8,6 +8,9 @@ Easy neural network visualizer winform control for .Net
 ![Several Nodes](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodes.PNG)
 ![Zoomed](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodesZoomed.png)
 
+## Installing
+Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/NeuralNetworkVisualizer).
+
 ## Example
 
 ```C#
