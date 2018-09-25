@@ -31,18 +31,21 @@ namespace WindowsFormsApp1
             NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new Formatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
             NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new Formatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
             NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new Formatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
