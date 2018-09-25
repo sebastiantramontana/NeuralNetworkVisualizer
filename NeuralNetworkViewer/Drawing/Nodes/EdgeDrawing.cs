@@ -27,7 +27,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         public override void Draw(ICanvas canvas)
         {
             ///Don't use a system Pen!
-            using (var pen = _preferences.Connector.GetFormat(this.Element.Weight.Value))
+            using (var pen = _preferences.Connector.GetFormat(this.Element.Weight))
             {
                 canvas.DrawLine(_fromPosition, _toPosition, pen);
             }

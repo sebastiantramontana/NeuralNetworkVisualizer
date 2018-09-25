@@ -4,7 +4,7 @@ namespace NeuralNetworkVisualizer.Preferences.Text
 {
     public class Formatter<T>
     {
-        private readonly Func<double, T> _formaterFunc;
+        private readonly Func<double?, T> _formaterFunc;
 
         /// <summary>
         /// Build a default formatter
@@ -18,7 +18,7 @@ namespace NeuralNetworkVisualizer.Preferences.Text
         /// Build a NEW custom formatter by passed value. Don't reuse it, will be disposed
         /// </summary>
         /// <param name="customFormaterFunc"></param>
-        public Formatter(Func<double, T> customFormaterFunc)
+        public Formatter(Func<double?, T> customFormaterFunc)
         {
             _formaterFunc = customFormaterFunc;
         }
@@ -29,13 +29,15 @@ namespace NeuralNetworkVisualizer.Preferences.Text
         /// <param name="whenNegative"></param>
         /// <param name="whenZero"></param>
         /// <param name="whenPositive"></param>
-        public Formatter(Func<T> whenNegative, Func<T> whenZero, Func<T> whenPositive)
+        /// <param name="whenNull"></param>
+        public Formatter(Func<T> whenNegative, Func<T> whenZero, Func<T> whenPositive, Func<T> whenNull)
         {
-            _formaterFunc = (v) => (v < 0.0 ? whenNegative() :
-                                    (v == 0.0 ? whenZero() : whenPositive()));
+            _formaterFunc = (v) => (!v.HasValue ? whenNull() :
+                                    (v.Value < 0.0 ? whenNegative() :
+                                    (v.Value == 0.0 ? whenZero() : whenPositive())));
         }
 
-        public T GetFormat(double value)
+        public T GetFormat(double? value)
         {
             return _formaterFunc(value);
         }
