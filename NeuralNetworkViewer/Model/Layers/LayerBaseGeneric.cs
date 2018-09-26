@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Model.Layers
 {
@@ -63,7 +61,7 @@ namespace NeuralNetworkVisualizer.Model.Layers
             ConnectNodeToNextLayer(node, this.Next);
         }
 
-        private void ConnectNodeToNextLayer(NodeBase node, PerceptronLayer nextLayer)
+        private void ConnectNodeToNextLayer(NodeBase previousNode, PerceptronLayer nextLayer)
         {
             //Connect the edges...
             if (nextLayer == null)
@@ -73,7 +71,7 @@ namespace NeuralNetworkVisualizer.Model.Layers
 
             foreach (var nextPerceptron in nextPerceptrons)
             {
-                nextPerceptron.EdgesInternal.Add(Edge.Create(node, nextPerceptron));
+                nextPerceptron.EdgesInternal.Add(Edge.Create(previousNode, nextPerceptron));
             }
         }
 
@@ -91,16 +89,18 @@ namespace NeuralNetworkVisualizer.Model.Layers
             }
         }
 
-        private protected override void ConnectChild(PerceptronLayer nextLayer)
+        private protected override void ConnectChild()
         {
-            foreach (var node in this.GetAllNodes())
+            for (PerceptronLayer layer = this.Next; layer != null; layer = layer.Next)
             {
-                ConnectNodeToNextLayer(node, nextLayer);
+                layer.RemoveEdgesLayer();
+
+                foreach(var node in layer.Previous.GetAllNodes())
+                {
+                    ConnectNodeToNextLayer(node, layer);
+                }
             }
         }
-
-        private protected virtual void AddNodeChild(TNode node) { }
-        private protected virtual void RemoveNodeChild(TNode node) { }
 
         private protected override void SetNewBias(Bias bias)
         {
@@ -112,5 +112,8 @@ namespace NeuralNetworkVisualizer.Model.Layers
             SetNodeToLayer(bias);
             ConnectNodeToNextLayer(bias);
         }
+
+        private protected virtual void AddNodeChild(TNode node) { }
+        private protected virtual void RemoveNodeChild(TNode node) { }
     }
 }

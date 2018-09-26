@@ -1,10 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Exceptions;
 using NeuralNetworkVisualizer.Model.Nodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Model.Layers
 {
@@ -16,6 +11,43 @@ namespace NeuralNetworkVisualizer.Model.Layers
         }
 
         public LayerBase Previous { get; internal set; }
+
+        public void Disconnect()
+        {
+            if (this.Previous != null)
+            {
+                if (this.Next != null)
+                {
+                    this.Previous.Next = this.Next;
+                    this.Next.Previous = this.Previous;
+                    this.Previous.Reconnect();
+                }
+                else
+                {
+                    this.Previous.Next = null;
+                }
+            }
+            else
+            {
+                if (this.Next != null)
+                {
+                    this.Next.Previous = null;
+                    this.Next.RemoveEdgesLayer();
+                }
+            }
+
+            RemoveEdgesLayer();
+            this.Previous = null;
+            this.Next = null;
+        }
+
+        internal void RemoveEdgesLayer()
+        {
+            foreach (var node in this.Nodes)
+            {
+                node.EdgesInternal.Clear();
+            }
+        }
 
         private protected override void AddNodeChild(Perceptron perceptron)
         {

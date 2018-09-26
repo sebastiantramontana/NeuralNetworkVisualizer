@@ -66,6 +66,7 @@ namespace NeuralNetworkVisualizer
 
         public void Redraw()
         {
+            ValidateModel(this.InputLayer); //Always validation is needed, because model could have been changed
             SafeInvoke(async () =>
             {
                 await RedrawAsync();

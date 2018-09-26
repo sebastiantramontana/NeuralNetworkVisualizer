@@ -1,10 +1,6 @@
-﻿using NeuralNetworkVisualizer.Exceptions;
-using NeuralNetworkVisualizer.Model.Nodes;
-using System;
+﻿using NeuralNetworkVisualizer.Model.Nodes;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Model.Layers
 {
@@ -15,7 +11,7 @@ namespace NeuralNetworkVisualizer.Model.Layers
 
         }
 
-        public PerceptronLayer Next { get; private set; }
+        public PerceptronLayer Next { get; internal set; }
 
         private Bias _Bias = null;
         public Bias Bias
@@ -30,20 +26,18 @@ namespace NeuralNetworkVisualizer.Model.Layers
 
         public void Connect(PerceptronLayer nextLayer)
         {
-            if (nextLayer == null)
-                throw new ArgumentNullException("nextLayer argument is null");
+            if (nextLayer == null) //Cut off the layer link
+            {
+                if (this.Next != null)
+                {
+                    this.Next.Previous = null; //cancel the Next's Previous layer (this) 
+                }
+
+                this.Next = null;
+                return;
+            }
 
             ValidateId(nextLayer.Id);
-
-            if (nextLayer.Next != null)
-            {
-                nextLayer.Next.Previous = nextLayer.Previous;
-            }
-
-            if (nextLayer.Previous != null)
-            {
-                nextLayer.Previous.Next = nextLayer.Next;
-            }
 
             if (this.Next != null)
             {
@@ -54,10 +48,15 @@ namespace NeuralNetworkVisualizer.Model.Layers
             this.Next = nextLayer;
             nextLayer.Previous = this;
 
-            ConnectChild(nextLayer);
+            ConnectChild();
         }
 
-        private protected abstract void ConnectChild(PerceptronLayer nextLayer);
+        internal void Reconnect()
+        {
+            ConnectChild();
+        }
+
+        private protected abstract void ConnectChild();
         private protected abstract void ValidateId(string id);
         private protected abstract void SetNewBias(Bias bias);
 
