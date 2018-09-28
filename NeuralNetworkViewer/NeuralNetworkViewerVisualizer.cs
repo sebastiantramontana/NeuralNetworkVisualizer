@@ -66,23 +66,39 @@ namespace NeuralNetworkVisualizer
 
         public void Redraw()
         {
-            SafeInvoke(() =>
+            var task = SafeInvoke(() =>
+             {
+                 return RedrawInternal();
+             });
+
+            if (task.Exception != null)
             {
-                RedrawInternal();
-            });
+                _InputLayer = null;
+                throw task.Exception.InnerException;
+            }
         }
 
         public async Task RedrawAsync()
         {
 #pragma warning disable CS1998
-            await SafeInvoke(async () =>
+            var task = SafeInvoke(async () =>
             {
-                RedrawInternal();
+                return RedrawInternal();
             });
 #pragma warning restore CS1998
+
+            try
+            {
+                await task.ConfigureAwait(true).GetAwaiter().GetResult();
+            }
+            catch
+            {
+                _InputLayer = null;
+                throw;
+            }
         }
 
-        private async void RedrawInternal()
+        private async Task RedrawInternal()
         {
             if (!this.IsHandleCreated)
                 return;
@@ -225,18 +241,6 @@ namespace NeuralNetworkVisualizer
             else
             {
                 action();
-            }
-        }
-
-        private async Task SafeInvoke(Func<Task> action)
-        {
-            if (this.InvokeRequired)
-            {
-                await (Task)this.Invoke(action);
-            }
-            else
-            {
-                await action();
             }
         }
 
