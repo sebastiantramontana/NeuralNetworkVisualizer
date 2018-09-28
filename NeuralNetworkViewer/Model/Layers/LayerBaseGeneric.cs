@@ -104,11 +104,6 @@ namespace NeuralNetworkVisualizer.Model.Layers
 
         private protected override void SetNewBias(Bias bias)
         {
-            if (bias != null)
-            {
-                ValidateId(bias.Id);
-            }
-
             SetNodeToLayer(bias);
             ConnectNodeToNextLayer(bias);
         }

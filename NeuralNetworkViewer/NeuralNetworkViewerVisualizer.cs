@@ -2,7 +2,6 @@
 using NeuralNetworkVisualizer.Drawing.Canvas;
 using NeuralNetworkVisualizer.Drawing.Layers;
 using NeuralNetworkVisualizer.Drawing.Nodes;
-using NeuralNetworkVisualizer.Exceptions;
 using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences;
@@ -23,6 +22,8 @@ namespace NeuralNetworkVisualizer
         public NeuralNetworkVisualizerControl()
         {
             InitializeComponent();
+
+            Control.CheckForIllegalCrossThreadCalls = true;
             this.BackColor = Color.White;
         }
 
@@ -43,7 +44,6 @@ namespace NeuralNetworkVisualizer
             }
             set
             {
-                ValidateModel(value);
                 _InputLayer = value;
                 Redraw();
             }
@@ -66,14 +66,23 @@ namespace NeuralNetworkVisualizer
 
         public void Redraw()
         {
-            ValidateModel(this.InputLayer); //Always validation is needed, because model could have been changed
-            SafeInvoke(async () =>
+            SafeInvoke(() =>
             {
-                await RedrawAsync();
+                RedrawInternal();
             });
         }
 
         public async Task RedrawAsync()
+        {
+#pragma warning disable CS1998
+            await SafeInvoke(async () =>
+            {
+                RedrawInternal();
+            });
+#pragma warning restore CS1998
+        }
+
+        private async void RedrawInternal()
         {
             if (!this.IsHandleCreated)
                 return;
@@ -82,12 +91,16 @@ namespace NeuralNetworkVisualizer
             {
                 picCanvas.Image.Dispose();
                 picCanvas.Image = null;
-                picCanvas.BackColor = this.BackColor;
             }
 
-            if (_InputLayer == null)
+            if (_InputLayer != null)
+            {
+                _InputLayer.Validate();
+            }
+            else
             {
                 picCanvas.ClientSize = this.ClientSize;
+                picCanvas.BackColor = this.BackColor;
                 return;
             }
 
@@ -119,37 +132,6 @@ namespace NeuralNetworkVisualizer
             }
 
             base.OnSizeChanged(e);
-        }
-
-        private void ValidateModel(InputLayer inputLayer)
-        {
-            if (inputLayer == null)
-            {
-                ///it's right! InputLayer can be null.
-                return;
-            }
-
-            LayerBase outputlayer = SearchOutputLayer(inputLayer);
-
-            if (outputlayer == inputLayer)
-            {
-                throw new MissingOutputException(inputLayer);
-            }
-
-            ///Bias doesn´t make sense to be in the output layer
-            ///TODO: Fix Model, make an OutputLayer
-            if (outputlayer.Bias != null)
-            {
-                throw new InvalidOutputBiasException(outputlayer);
-            }
-        }
-
-        private LayerBase SearchOutputLayer(InputLayer inputLayer)
-        {
-            LayerBase outputlayer;
-            for (outputlayer = inputLayer; outputlayer.Next != null; outputlayer = outputlayer.Next) ;
-
-            return outputlayer;
         }
 
         private void SetQuality(Graphics graphics)
@@ -243,6 +225,18 @@ namespace NeuralNetworkVisualizer
             else
             {
                 action();
+            }
+        }
+
+        private async Task SafeInvoke(Func<Task> action)
+        {
+            if (this.InvokeRequired)
+            {
+                await (Task)this.Invoke(action);
+            }
+            else
+            {
+                await action();
             }
         }
 

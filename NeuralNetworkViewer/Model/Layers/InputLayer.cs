@@ -1,35 +1,38 @@
 ﻿using NeuralNetworkVisualizer.Exceptions;
 using NeuralNetworkVisualizer.Model.Nodes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Model.Layers
 {
     public class InputLayer : LayerBase<Input>
     {
-        public InputLayer(string id) : base(id) { }
+        private IDictionary<string, Element> _allElements;
 
-        public Element Find(string id)
+        public InputLayer(string id) : base(id)
         {
-            Element elem = null;
-
-            for (LayerBase layer = this; layer != null; layer = layer.Next)
-            {
-                if (layer.Id == id)
-                    return layer;
-
-                elem = layer.FindByIdRecursive(id);
-
-                if (elem != null)
-                    break;
-            }
-
-            return elem;
+            
         }
 
+        /// <summary>
+        /// Find an element by id throughout the entire model
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The found element or null if it is not exist</returns>
+        public Element Find(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return null;
+
+            _allElements.TryGetValue(id, out Element element);
+            return element;
+        }
+
+        /// <summary>
+        /// Find an typed element by id throughout the entire model
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The found element or null if itsn't exist or type doesn't match</returns>
         public TElement Find<TElement>(string id) where TElement : Element
         {
             return Find(id) as TElement;
@@ -59,15 +62,36 @@ namespace NeuralNetworkVisualizer.Model.Layers
             return count;
         }
 
-        private protected override void ValidateId(string id)
+        public LayerBase SearchOutputLayer()
         {
-            for (LayerBase layer = this; layer != null; layer = layer.Next)
+            LayerBase outputlayer;
+            for (outputlayer = this; outputlayer.Next != null; outputlayer = outputlayer.Next) ;
+
+            return outputlayer;
+        }
+
+        internal void Validate()
+        {
+            LayerBase outputlayer = SearchOutputLayer();
+
+            if (outputlayer == this)
             {
-                if (!layer.ValidateDuplicatedIdRecursive(id))
-                {
-                    throw new DuplicatedIdException(id);
-                }
+                throw new MissingOutputException(this);
             }
+
+            ///Bias doesn´t make sense to be in the output layer
+            ///TODO: Fix Model, make an OutputLayer
+            if (outputlayer.Bias != null)
+            {
+                throw new InvalidOutputBiasException(outputlayer);
+            }
+
+            //Don't reuse _allElements! 
+            //if filled, it will throw a DuplicatedIdException for each call
+            var acumulatedIds = new Dictionary<string, Element>();
+            ValidateId(acumulatedIds);
+
+            _allElements = acumulatedIds; //model could have been changed
         }
     }
 }
