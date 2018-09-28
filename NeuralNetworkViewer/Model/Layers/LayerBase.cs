@@ -1,6 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Model.Nodes;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NeuralNetworkVisualizer.Model.Layers
 {
@@ -37,8 +36,6 @@ namespace NeuralNetworkVisualizer.Model.Layers
                 return;
             }
 
-            ValidateId(nextLayer.Id);
-
             if (this.Next != null)
             {
                 this.Next.Previous = nextLayer;
@@ -56,33 +53,17 @@ namespace NeuralNetworkVisualizer.Model.Layers
             ConnectChild();
         }
 
+        private protected override void ValidateDuplicatedIChild(IDictionary<string, Element> acumulatedIds)
+        {
+            foreach (var node in this.GetAllNodes())
+                node.ValidateId(acumulatedIds);
+
+            if (this.Next != null)
+                this.Next.ValidateId(acumulatedIds);
+        }
+
         private protected abstract void ConnectChild();
-        private protected abstract void ValidateId(string id);
         private protected abstract void SetNewBias(Bias bias);
-
-        internal protected override Element FindByIdRecursive(string id)
-        {
-            var nodes = GetAllNodes();
-            Element elem = nodes.SingleOrDefault(n => n.Id == id);
-
-            if (elem != null)
-                return elem;
-
-            foreach (var node in nodes)
-            {
-                elem = node.FindByIdRecursive(id);
-
-                if (elem != null)
-                    break;
-            }
-
-            return elem;
-        }
-
-        protected internal override bool ValidateDuplicatedIdRecursive(string id)
-        {
-            return (this.Id != id && this.GetAllNodes().All(n => n.ValidateDuplicatedIdRecursive(id)));
-        }
 
         public abstract IEnumerable<NodeBase> GetAllNodes();
     }

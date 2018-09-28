@@ -71,24 +71,5 @@ namespace NeuralNetworkVisualizer.Model.Layers
                 perceptron.EdgesInternal.Add(Edge.Create(previousNode, perceptron));
             }
         }
-
-        private protected override void ValidateId(string id)
-        {
-            for (LayerBase layer = this; layer != null; layer = layer.Next)
-            {
-                if (!layer.ValidateDuplicatedIdRecursive(id))
-                {
-                    throw new DuplicatedIdException(id);
-                }
-            }
-
-            for (LayerBase layer = this.Previous; layer != null; layer = (layer as PerceptronLayer)?.Previous)
-            {
-                if (!layer.ValidateDuplicatedIdRecursive(id))
-                {
-                    throw new DuplicatedIdException(id);
-                }
-            }
-        }
     }
 }

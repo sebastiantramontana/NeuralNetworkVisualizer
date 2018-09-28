@@ -1,9 +1,6 @@
 ﻿using NeuralNetworkVisualizer.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Model
 {
@@ -11,16 +8,38 @@ namespace NeuralNetworkVisualizer.Model
     {
         internal Element(string id)
         {
-            if (string.IsNullOrWhiteSpace(id))
-                throw new InvalidIdException(id);
-
             this.Id = id;
+            this.ValidateId();
         }
-        public string Id { get; private set; }
+
+        public string Id { get; set; }
         public object Object { get; set; }
 
-        internal protected abstract Element FindByIdRecursive(string id);
-        internal protected abstract bool ValidateDuplicatedIdRecursive(string id);
+        internal void ValidateId(IDictionary<string, Element> acumulatedIds)
+        {
+            ValidateId();
+
+            if (acumulatedIds == null)
+                throw new ArgumentNullException($"Internal Error: {nameof(acumulatedIds)} is null.");
+
+            if (acumulatedIds.ContainsKey(this.Id))
+                throw new DuplicatedIdException(this.Id);
+
+            acumulatedIds.Add(this.Id, this);
+
+            ValidateDuplicatedIChild(acumulatedIds);
+        }
+
+        private void ValidateId()
+        {
+            if (string.IsNullOrWhiteSpace(this.Id))
+                throw new InvalidIdException(this.Id);
+        }
+
+        private protected virtual void ValidateDuplicatedIChild(IDictionary<string, Element> acumulatedIds)
+        {
+
+        }
 
         public override bool Equals(object obj)
         {
@@ -43,6 +62,6 @@ namespace NeuralNetworkVisualizer.Model
         public static bool operator ==(Element b1, Element b2) => Object.Equals(b1, b2);
         public static bool operator !=(Element b1, Element b2) => !Object.Equals(b1, b2);
 
-        
+
     }
 }

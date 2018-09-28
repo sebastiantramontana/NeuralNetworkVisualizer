@@ -7,7 +7,7 @@ namespace NeuralNetworkVisualizer.Model.Nodes
     {
         public Perceptron(string id) : base(id)
         {
-            EdgesInternal = new List<Edge>();
+            this.EdgesInternal = new List<Edge>();
         }
 
         public double? SumValue { get; set; }
@@ -15,28 +15,10 @@ namespace NeuralNetworkVisualizer.Model.Nodes
         public IEnumerable<Edge> Edges { get => this.EdgesInternal; } //get read-only access to externals
         internal ICollection<Edge> EdgesInternal { get; private set; } //for internal use. Hide to externals.
 
-        internal protected override Element FindByIdRecursive(string id)
+        private protected override void ValidateDuplicatedIChild(IDictionary<string, Element> acumulatedIds)
         {
-            var edges = this.Edges;
-            Element elem = edges.SingleOrDefault(e => e.Id == id);
-
-            if (elem != null)
-                return elem;
-
-            foreach (var edge in edges)
-            {
-                elem = edge.FindByIdRecursive(id);
-
-                if (elem != null)
-                    break;
-            }
-
-            return elem;
-        }
-
-        protected internal override bool ValidateDuplicatedIdRecursive(string id)
-        {
-            return (this.Id != id && this.Edges.All(e => e.ValidateDuplicatedIdRecursive(id)));
+            foreach (var edge in this.Edges)
+                edge.ValidateId(acumulatedIds);
         }
     }
 }
