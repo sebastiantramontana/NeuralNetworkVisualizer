@@ -45,6 +45,7 @@ namespace NeuralNetworkVisualizer
             set
             {
                 _InputLayer = value;
+                _zoom = 1f; //restart zoom
                 Redraw();
             }
         }
@@ -56,13 +57,18 @@ namespace NeuralNetworkVisualizer
             get => _zoom;
             set
             {
-                _zoom = value;
+                if (_InputLayer == null)
+                {
+                    return; //nothing to do
+                }
+
+                _zoom = Constrain(0.1f, value, 10.0f); //limit the zoom value: Graphics will throw exception if not.
                 Redraw();
             }
         }
 
         [Browsable(false)]
-        public Image Image { get => SafeInvoke(() => picCanvas.Image.Clone() as Image); } //Clone for safe handling
+        public Image Image { get => SafeInvoke(() => picCanvas.Image?.Clone() as Image ?? new Bitmap(this.ClientSize.Width, this.ClientSize.Height)); } //Clone for safe handling
 
         public void Redraw()
         {
@@ -247,6 +253,11 @@ namespace NeuralNetworkVisualizer
         private T SafeInvoke<T>(Func<T> action)
         {
             return (this.InvokeRequired ? (T)this.Invoke(action) : action());
+        }
+
+        private T Constrain<T>(T low, T value, T max) where T : IComparable<T>
+        {
+            return (value.CompareTo(low) < 0 ? low : (value.CompareTo(max) > 0 ? max : value));
         }
 
         protected override void Dispose(bool disposing)
