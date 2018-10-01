@@ -53,7 +53,7 @@ namespace NeuralNetworkVisualizer.Model.Layers
             return max;
         }
 
-        public int LayersCount()
+        public int CountLayers()
         {
             int count = 0;
 

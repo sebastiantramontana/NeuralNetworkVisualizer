@@ -224,7 +224,7 @@ namespace NeuralNetworkVisualizer
 
         private Size GetLayersDrawingSize()
         {
-            var layersCount = _InputLayer.LayersCount();
+            var layersCount = _InputLayer.CountLayers();
 
             var layerWidth = picCanvas.ClientSize.Width / layersCount;
             var layerHeight = picCanvas.ClientSize.Height;
