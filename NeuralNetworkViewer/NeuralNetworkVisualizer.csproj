@@ -93,8 +93,12 @@
     <Compile Include="Preferences\Brushes\GradientBrushPreference.cs" />
     <Compile Include="Preferences\Brushes\IBrushPreference.cs" />
     <Compile Include="Preferences\Brushes\SolidBrushPreference.cs" />
+    <Compile Include="Preferences\Formatting\BasicFormatter.cs" />
+    <Compile Include="Preferences\Formatting\ByValueSignFormatter.cs" />
+    <Compile Include="Preferences\Formatting\CustomFormatter.cs" />
+    <Compile Include="Preferences\Formatting\FormatterBase.cs" />
+    <Compile Include="Preferences\Formatting\IFormatter.cs" />
     <Compile Include="Preferences\PerceptronPreference.cs" />
-    <Compile Include="Preferences\Formatting\Formatter.cs" />
     <Compile Include="Preferences\EdgePreference.cs" />
     <Compile Include="Preferences\LayerPreference.cs" />
     <Compile Include="Preferences\NodePreference.cs" />

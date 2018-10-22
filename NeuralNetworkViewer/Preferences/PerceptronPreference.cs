@@ -1,13 +1,14 @@
-﻿using NeuralNetworkVisualizer.Preferences.Text;
+﻿using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Text;
 
 namespace NeuralNetworkVisualizer.Preferences
 {
     public class PerceptronPreference : NodePreference
     {
-        private Formatter<TextPreference> _sumValueFormatter;
-        public Formatter<TextPreference> SumValueFormatter
+        private IFormatter<TextPreference> _sumValueFormatter;
+        public IFormatter<TextPreference> SumValueFormatter
         {
-            get => _sumValueFormatter ?? (_sumValueFormatter = new Formatter<TextPreference>(() => new TextPreference()));
+            get => _sumValueFormatter ?? (_sumValueFormatter = new BasicFormatter<TextPreference>(() => new TextPreference()));
             set => _sumValueFormatter = value;
         }
     }

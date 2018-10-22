@@ -1,4 +1,5 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
+using NeuralNetworkVisualizer.Preferences.Formatting;
 using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
@@ -14,10 +15,10 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _background = value;
         }
 
-        private Formatter<TextPreference> _outputValueFormatter;
-        public Formatter<TextPreference> OutputValueFormatter
+        private IFormatter<TextPreference> _outputValueFormatter;
+        public IFormatter<TextPreference> OutputValueFormatter
         {
-            get => _outputValueFormatter ?? (_outputValueFormatter = new Formatter<TextPreference>(() => new TextPreference()));
+            get => _outputValueFormatter ?? (_outputValueFormatter = new BasicFormatter<TextPreference>(() => new TextPreference()));
             set => _outputValueFormatter = value;
         }
 
