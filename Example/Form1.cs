@@ -2,6 +2,7 @@
 using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences.Brushes;
+using NeuralNetworkVisualizer.Preferences.Formatting;
 using NeuralNetworkVisualizer.Preferences.Text;
 using System;
 using System.Drawing;
@@ -28,28 +29,28 @@ namespace WindowsFormsApp1
 
             cboQuality.SelectedItem = NeuralNetworkVisualizerControl1.Preferences.Quality;
 
-            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new Formatter<TextPreference>(
+            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new Formatter<TextPreference>(
+            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new Formatter<TextPreference>(
+            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
+            NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new CustomFormatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
 
             //To remove layer's titles
             //NeuralNetworkVisualizerControl1.Preferences.Layers = null;
