@@ -17,28 +17,28 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
             /******** Configure Preferences: ********/
 
             //Font, Colors, etc.
-            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new Formatter<TextPreference>(
+            NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
-		() => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new Formatter<TextPreference>(
+            NeuralNetworkVisualizerControl1.Preferences.Perceptrons.OutputValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
-		() => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new Formatter<TextPreference>(
+            NeuralNetworkVisualizerControl1.Preferences.Edges.ValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Gray) },
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) },
-		() => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
+                () => new TextPreference { Brush = new SolidBrushPreference(Color.Black) }
             );
 
-            NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new Formatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
+            NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new CustomFormatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
 
             //Graphics quality
             NeuralNetworkVisualizerControl1.Preferences.Quality = RenderQuality.High; //Low, Medium, High. Medium is default
