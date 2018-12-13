@@ -15,7 +15,10 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
 
 ```C#
             /******** Configure Preferences: ********/
-
+            
+            //Drawing resize behavior
+            NeuralNetworkVisualizerControl1.Preferences.AsyncRedrawOnResize = false; //default is true
+            
             //Font, Colors, etc.
             NeuralNetworkVisualizerControl1.Preferences.Inputs.OutputValueFormatter = new ByValueSignFormatter<TextPreference>(
                 () => new TextPreference { Brush = new SolidBrushPreference(Color.Red) },
