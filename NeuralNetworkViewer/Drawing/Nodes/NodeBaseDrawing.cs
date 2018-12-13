@@ -44,8 +44,9 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
             this.EdgeStartPosition = new Point(_cache.EllipseRectangle.Value.X + _cache.EllipseRectangle.Value.Width, _cache.EllipseRectangle.Value.Y + (_cache.EllipseRectangle.Value.Height / 2));
 
             using (var backBrush = _preferences.Background.CreateBrush())
+            using (var pen = _preferences.Border.CreatePen())
             {
-                canvas.DrawEllipse(_cache.EllipseRectangle.Value, _preferences.Border, backBrush);
+                canvas.DrawEllipse(_cache.EllipseRectangle.Value, pen, backBrush);
             }
 
             DrawContent(canvas, _cache.EllipseRectangle.Value);

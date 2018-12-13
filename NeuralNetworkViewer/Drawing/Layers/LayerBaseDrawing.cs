@@ -40,8 +40,9 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
             var rect = new Rectangle(0, 0, canvas.MaxWidth, canvas.MaxHeight);
 
             using (var brush = _preferences.Layers.Background.CreateBrush())
+            using (var pen = _preferences.Layers.Border.CreatePen())
             {
-                canvas.DrawRectangle(rect, _preferences.Layers.Border, brush);
+                canvas.DrawRectangle(rect, pen, brush);
             }
 
             DrawTitle(canvas);

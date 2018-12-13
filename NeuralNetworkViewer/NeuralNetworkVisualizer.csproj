@@ -98,6 +98,8 @@
     <Compile Include="Preferences\Formatting\CustomFormatter.cs" />
     <Compile Include="Preferences\Formatting\FormatterBase.cs" />
     <Compile Include="Preferences\Formatting\IFormatter.cs" />
+    <Compile Include="Preferences\Pens\IPen.cs" />
+    <Compile Include="Preferences\Pens\SimplePen.cs" />
     <Compile Include="Preferences\PerceptronPreference.cs" />
     <Compile Include="Preferences\EdgePreference.cs" />
     <Compile Include="Preferences\LayerPreference.cs" />
