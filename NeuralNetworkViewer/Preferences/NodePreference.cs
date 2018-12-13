@@ -1,8 +1,9 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Brushes;
 using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Pens;
 using NeuralNetworkVisualizer.Preferences.Text;
 using System;
-using System.Drawing;
+using Draw = System.Drawing;
 
 namespace NeuralNetworkVisualizer.Preferences
 {
@@ -11,7 +12,7 @@ namespace NeuralNetworkVisualizer.Preferences
         private IBrushPreference _background;
         public IBrushPreference Background
         {
-            get => _background ?? (_background = new SolidBrushPreference(Color.Transparent));
+            get => _background ?? (_background = new SolidBrushPreference(Draw.Color.Transparent));
             set => _background = value;
         }
 
@@ -22,13 +23,10 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _outputValueFormatter = value;
         }
 
-        private Pen _border = new Pen(Color.Black);
-        /// <summary>
-        /// The Pen for border: Don't use a System Pen, but clone it!
-        /// </summary>
-        public Pen Border
+        private IPen _border = new SimplePen(Draw.Pens.Black);
+        public IPen Border
         {
-            get => _border ?? (_border = new Pen(Color.Transparent));
+            get => _border ?? (_border = new SimplePen(Draw.Pens.Transparent));
             set => _border = value;
         }
 

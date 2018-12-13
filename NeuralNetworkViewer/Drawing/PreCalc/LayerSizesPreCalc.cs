@@ -9,7 +9,13 @@ namespace NeuralNetworkVisualizer.Drawing.Cache
         internal LayerSizesPreCalc(Size canvasSize, int maxNodes, Preference preferences)
         {
             var doubleNodeMargin = preferences.NodeMargins * 2;
-            var maxBorder = Math.Max(preferences.Inputs.Border.Width, preferences.Perceptrons.Border.Width);
+            float maxBorder;
+
+            using (var inputPen = preferences.Inputs.Border.CreatePen())
+            using (var perceptronPen = preferences.Perceptrons.Border.CreatePen())
+            {
+                maxBorder = Math.Max(inputPen.Width, perceptronPen.Width);
+            }
 
             this.TotalNodesHeight = canvasSize.Height - (preferences.Layers.Title.Height + doubleNodeMargin);
             this.NodeHeight = this.TotalNodesHeight / maxNodes;

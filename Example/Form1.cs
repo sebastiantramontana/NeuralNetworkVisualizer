@@ -52,6 +52,9 @@ namespace WindowsFormsApp1
 
             NeuralNetworkVisualizerControl1.Preferences.Edges.Connector = new CustomFormatter<Pen>((v) => v == 0.0 ? new Pen(Color.LightGray) : new Pen(Color.Black));
 
+            //default is true
+            NeuralNetworkVisualizerControl1.Preferences.AsyncRedrawOnResize = false;
+
             //To remove layer's titles
             //NeuralNetworkVisualizerControl1.Preferences.Layers = null;
         }

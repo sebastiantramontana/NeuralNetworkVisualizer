@@ -72,76 +72,109 @@ namespace NeuralNetworkVisualizer
 
         public void Redraw()
         {
-            var task = SafeInvoke(() =>
-             {
-                 return RedrawInternal();
-             });
-
-            if (task.Exception != null)
-            {
-                _InputLayer = null;
-                throw task.Exception.InnerException;
-            }
+            RedrawInternalAsync((graph) => { DrawLayers(graph); return Task.CompletedTask; }).Wait();
         }
 
+        private bool _isDrawing = false; //flag to avoid multiple parallel drawing
         public async Task RedrawAsync()
         {
-#pragma warning disable CS1998
-            var task = SafeInvoke(async () =>
+            if (_isDrawing)
             {
-                return RedrawInternal();
-            });
-#pragma warning restore CS1998
+                return;
+            }
 
-            try
+            _isDrawing = true;
+            await SafeInvoke(async () =>
             {
-                await task.ConfigureAwait(true).GetAwaiter().GetResult();
-            }
-            catch
-            {
-                _InputLayer = null;
-                throw;
-            }
+                await RedrawInternalAsync(async (graph) => await DrawLayersAsync(graph));
+            });
+
+            _isDrawing = false;
         }
 
-        private async Task RedrawInternal()
+        private async Task RedrawInternalAsync(Func<Graphics, Task> drawLayersAction)
+        {
+            if (!PrepareCanvas())
+                return;
+
+            var graphAndImage = GetGraphics();
+
+            await drawLayersAction(graphAndImage.Graph);
+            picCanvas.Image = graphAndImage.Image;
+
+            Destroy.Disposable(ref graphAndImage.Graph);
+        }
+
+        private bool PrepareCanvas()
         {
             if (!this.IsHandleCreated)
-                return;
+                return false;
 
-            if (picCanvas.Image != null) //Clear before anything
-            {
-                picCanvas.Image.Dispose();
-                picCanvas.Image = null;
-            }
+            DestroyImageCanvas();
 
-            if (_InputLayer != null)
-            {
-                _InputLayer.Validate();
-            }
-            else
-            {
-                picCanvas.ClientSize = this.ClientSize;
-                picCanvas.BackColor = this.BackColor;
-                return;
-            }
+            if (!SetBlankCanvasIfNotInputValid())
+                return false;
 
-            picCanvas.Size = new Size((int)(_zoom * this.ClientSize.Width), (int)(_zoom * this.ClientSize.Height));
+            ResizeCanvas();
 
+            return true;
+        }
+
+        private (Graphics Graph, Image Image) GetGraphics()
+        {
             Bitmap bmp = new Bitmap(picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
             Graphics graph = Graphics.FromImage(bmp);
 
             graph.Clear(this.BackColor);
             SetQuality(graph);
 
-            await DrawLayers(graph);
+            return (graph, bmp);
+        }
 
-            picCanvas.Image = bmp;
-            Destroy.Disposable(ref graph);
+        private void ResizeCanvas()
+        {
+            picCanvas.Size = new Size((int)(_zoom * this.ClientSize.Width), (int)(_zoom * this.ClientSize.Height));
+        }
+
+        private bool SetBlankCanvasIfNotInputValid()
+        {
+            if (!ValidateInputLayer())
+            {
+                SetBlankCanvas();
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateInputLayer()
+        {
+            if (_InputLayer != null)
+            {
+                _InputLayer.Validate();
+                return true;
+            }
+
+            return false;
+        }
+
+        private void SetBlankCanvas()
+        {
+            picCanvas.ClientSize = this.ClientSize;
+            picCanvas.BackColor = this.BackColor;
+        }
+
+        private void DestroyImageCanvas()
+        {
+            if (picCanvas.Image != null) //Clear before anything
+            {
+                picCanvas.Image.Dispose();
+                picCanvas.Image = null;
+            }
         }
 
         private Size _previousSize = Size.Empty;
-        protected async override void OnSizeChanged(EventArgs e)
+        protected override async void OnSizeChanged(EventArgs e)
         {
             _previousSize = this.ClientSize;
 
@@ -149,7 +182,14 @@ namespace NeuralNetworkVisualizer
             {
                 if (!_previousSize.IsEmpty)
                 {
-                    await RedrawAsync();
+                    if (_preferences.AsyncRedrawOnResize)
+                    {
+                        await RedrawAsync();
+                    }
+                    else
+                    {
+                        Redraw();
+                    }
                 }
             }
 
@@ -186,7 +226,28 @@ namespace NeuralNetworkVisualizer
             }
         }
 
-        private async Task DrawLayers(Graphics graph)
+        private void DrawLayers(Graphics graph)
+        {
+            DrawLayersGeneral(graph, (layerDrawing, layerCanvas) =>
+            {
+                layerDrawing.Draw(layerCanvas);
+                return Task.CompletedTask;
+            }).Wait();
+        }
+
+        private async Task DrawLayersAsync(Graphics graph)
+        {
+            await DrawLayersGeneral(graph, async (layerDrawing, layerCanvas) =>
+            {
+                await Task.Factory.StartNew((obj) =>
+                {
+                    var layerAndCanvas = obj as Tuple<ILayerDrawing, ICanvas>;
+                    layerAndCanvas.Item1.Draw(layerAndCanvas.Item2);
+                }, new Tuple<ILayerDrawing, ICanvas>(layerDrawing, layerCanvas));
+            });
+        }
+
+        private async Task DrawLayersGeneral(Graphics graph, Func<ILayerDrawing, ICanvas, Task> drawLayerAction)
         {
             var layersDrawingSize = GetLayersDrawingSize();
             var graphCanvas = new GraphicsCanvas(graph, picCanvas.ClientSize.Width, picCanvas.ClientSize.Height);
@@ -215,12 +276,7 @@ namespace NeuralNetworkVisualizer
                 var canvasRect = new Rectangle(x, 0, layersDrawingSize.Width, layersDrawingSize.Height);
                 var layerCanvas = new NestedCanvas(canvasRect, graphCanvas);
 
-                await Task.Factory.StartNew((object canvasLayerParam) =>
-                {
-                    var canvasLayer = canvasLayerParam as Tuple<ILayerDrawing, ICanvas>; //I prefer rather than ValueTuple
-                    SafeInvoke(() => { canvasLayer.Item1.Draw(canvasLayer.Item2); });
-
-                }, new Tuple<ILayerDrawing, ICanvas>(layerDrawing, layerCanvas));
+                await drawLayerAction(layerDrawing, layerCanvas);
 
                 previousNodesDic = layerDrawing.NodesDrawing.ToDictionary(n => n.Node, n => n);
 
