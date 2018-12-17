@@ -230,3 +230,8 @@ FakesAssemblies/
 /Example/bin/Release/WindowsFormsApp1.exe.config
 /Example/obj/Release/WindowsFormsApp1.Form1.resources
 /NeuralNetworkViewer/nuget.txt
+/Example/bin/*.*
+/Example/bin/Debug/*.config
+/Example/obj/Debug/*.CopyComplete
+/Example/obj/Debug/*.txt
+/Example/obj/Debug/*.resources
