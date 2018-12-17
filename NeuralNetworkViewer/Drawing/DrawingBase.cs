@@ -9,11 +9,6 @@ using System.Threading.Tasks;
 
 namespace NeuralNetworkVisualizer.Drawing
 {
-    internal interface IDrawing
-    {
-        void Draw(ICanvas canvas);
-    }
-
     internal abstract class DrawingBase<TElement> : IDrawing where TElement : Element
     {
         internal DrawingBase(TElement element)
