@@ -3,6 +3,7 @@ using NeuralNetworkVisualizer.Drawing.Canvas;
 using NeuralNetworkVisualizer.Model;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences;
+using NeuralNetworkVisualizer.Selection;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,14 +17,18 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly Preference _preferences;
         private readonly PerceptronSizesPreCalc _cache;
         private readonly EdgeSizesPreCalc _edgesCache;
+        private readonly IElementSelectionChecker _selectionChecker;
+        private readonly ISelectableElementRegister _selectableElementRegister;
 
-        internal PerceptronDrawing(Perceptron element, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, Preference preferences, PerceptronSizesPreCalc cache, EdgeSizesPreCalc edgesCache) : base(element, preferences.Perceptrons, cache)
+        internal PerceptronDrawing(Perceptron element, IDictionary<NodeBase, INodeDrawing> previousNodes, ICanvas edgesCanvas, Preference preferences, PerceptronSizesPreCalc cache, EdgeSizesPreCalc edgesCache, IElementSelectionChecker selectionChecker, ISelectableElementRegister selectableElementRegister) : base(element, preferences.Perceptrons, cache, selectableElementRegister, selectionChecker)
         {
             _previousNodes = previousNodes;
             _edgesCanvas = edgesCanvas;
             _preferences = preferences;
             _cache = cache;
             _edgesCache = edgesCache;
+            _selectionChecker = selectionChecker;
+            _selectableElementRegister = selectableElementRegister;
         }
 
         protected override void DrawContent(ICanvas canvas, Rectangle rect)
@@ -64,7 +69,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
                 var outputPositionTrans = previousNode.Canvas.Translate(previousNode.EdgeStartPosition, _edgesCanvas);
                 var inputPositionTrans = canvas.Translate(inputPosition, _edgesCanvas);
 
-                var edgeDrawing = new EdgeDrawing(edge, _preferences.Edges, outputPositionTrans, inputPositionTrans, textEdgeHeight, _edgesCache);
+                var edgeDrawing = new EdgeDrawing(edge, _preferences.Edges, outputPositionTrans, inputPositionTrans, textEdgeHeight, _edgesCache, _selectableElementRegister, _selectionChecker);
                 edgeDrawing.Draw(_edgesCanvas);
             }
         }

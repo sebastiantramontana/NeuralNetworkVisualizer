@@ -2,8 +2,10 @@
 using NeuralNetworkVisualizer.Drawing.Canvas;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences;
+using NeuralNetworkVisualizer.Selection;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace NeuralNetworkVisualizer.Drawing.Nodes
 {
@@ -14,25 +16,53 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly Point _toPosition;
         private readonly int _textHeight;
         private readonly EdgeSizesPreCalc _cache;
+        private readonly ISelectableElementRegister _selectableElementRegister;
+        private readonly IElementSelectionChecker _selectionChecker;
 
-        internal EdgeDrawing(Edge element, EdgePreference preferences, Point fromPosition, Point toPosition, int textHeight, EdgeSizesPreCalc cache) : base(element)
+        internal EdgeDrawing(Edge element, EdgePreference preferences, Point fromPosition, Point toPosition, int textHeight, EdgeSizesPreCalc cache, ISelectableElementRegister selectableElementRegister, IElementSelectionChecker selectionChecker) : base(element)
         {
             _preferences = preferences;
             _fromPosition = fromPosition;
             _toPosition = toPosition;
             _textHeight = textHeight;
             _cache = cache;
+            _selectableElementRegister = selectableElementRegister;
+            _selectionChecker = selectionChecker;
         }
 
         public override void Draw(ICanvas canvas)
         {
-            ///Don't use a system Pen!
-            using (var pen = _preferences.Connector.GetFormat(this.Element.Weight))
+            RegisterSelectableConnectorLine(canvas);
+
+            using (var pen = GetPen(_selectionChecker.IsSelected(this.Element)))
             {
                 canvas.DrawLine(_fromPosition, _toPosition, pen);
             }
 
             DrawWeight(canvas);
+        }
+
+        private void RegisterSelectableConnectorLine(ICanvas canvas)
+        {
+            var gp = new GraphicsPath();
+            gp.AddPolygon(new[]
+            {
+                new Point(_fromPosition.X-2 , _fromPosition.Y-2),
+                new Point(_fromPosition.X+2 , _fromPosition.Y+2),
+                new Point(_toPosition.X+2 , _toPosition.Y+2),
+                new Point(_toPosition.X-2 , _toPosition.Y-2),
+            });
+
+            gp.CloseFigure();
+
+            _selectableElementRegister.Register(new RegistrationInfo(this.Element, canvas, new Region(gp), 3));
+        }
+
+        private Pen GetPen(bool isSelected)
+        {
+            return (isSelected)
+                ? _preferences.WhenSelected.CreatePen()
+                : _preferences.Connector.GetFormat(this.Element.Weight);
         }
 
         private void DrawWeight(ICanvas canvas)

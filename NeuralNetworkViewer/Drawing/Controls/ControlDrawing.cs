@@ -4,6 +4,7 @@ using NeuralNetworkVisualizer.Drawing.Layers;
 using NeuralNetworkVisualizer.Drawing.Nodes;
 using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
+using NeuralNetworkVisualizer.Selection;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,23 +15,28 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
 {
     internal class ControlDrawing : IControlDrawing
     {
-        private readonly IControlCanvas _controlCanvas;
+        private readonly IElementSelectionChecker _selectionChecker;
+        private readonly ISelectableElementRegister _selectableElementRegister;
+        private readonly ISelectionResolver _selectionResolver;
 
-        public ControlDrawing(IControlCanvas controlCanvas)
+        public ControlDrawing(IControlCanvas controlCanvas, IElementSelectionChecker selectionChecker, ISelectableElementRegister selectableElementRegister, ISelectionResolver selectionResolver)
         {
-            _controlCanvas = controlCanvas;
+            this.ControlCanvas = controlCanvas;
+            _selectionChecker = selectionChecker;
+            _selectableElementRegister = selectableElementRegister;
+            _selectionResolver = selectionResolver;
         }
 
-        public IControlCanvas ControlCanvas => _controlCanvas;
+        public IControlCanvas ControlCanvas { get; }
 
         public Image GetImage()
         {
-            return _controlCanvas.Image;
+            return this.ControlCanvas.Image;
         }
 
         public void Redraw()
         {
-            if (!_controlCanvas.IsReady)
+            if (!this.ControlCanvas.IsReady)
             {
                 return;
             }
@@ -41,13 +47,13 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
         private bool _isDrawing = false; //flag to avoid multiple parallel drawing
         public async Task RedrawAsync()
         {
-            if (!_controlCanvas.IsReady || _isDrawing)
+            if (!this.ControlCanvas.IsReady || _isDrawing)
             {
                 return;
             }
 
             _isDrawing = true;
-            await _controlCanvas.SafeInvoke(async () =>
+            await this.ControlCanvas.SafeInvoke(async () =>
             {
                 await RedrawInternalAsync(async (graph) => await DrawLayersAsync(graph));
             });
@@ -59,14 +65,14 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
         {
             if (!ValidateInputLayer())
             {
-                _controlCanvas.SetBlank();
+                this.ControlCanvas.SetBlank();
             }
             else
             {
-                var graphAndImage = _controlCanvas.GetGraphics();
+                var graphAndImage = this.ControlCanvas.GetGraphics();
 
                 await drawLayersAction(graphAndImage.Graph);
-                _controlCanvas.Image = graphAndImage.Image;
+                this.ControlCanvas.Image = graphAndImage.Image;
 
                 Destroy.Disposable(ref graphAndImage.Graph);
             }
@@ -74,7 +80,7 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
 
         private bool ValidateInputLayer()
         {
-            var inputLayer = _controlCanvas.Control.InputLayer;
+            var inputLayer = this.ControlCanvas.Control.InputLayer;
 
             if (inputLayer != null)
             {
@@ -108,14 +114,16 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
 
         private async Task DrawLayersGeneral(Graphics graph, Func<ILayerDrawing, ICanvas, Task> drawLayerAction)
         {
-            var layersDrawingSize = _controlCanvas.GetLayersDrawingSize();
-            var graphCanvas = new GraphicsCanvas(graph, _controlCanvas.Size.Width, _controlCanvas.Size.Height);
+            var layersDrawingSize = this.ControlCanvas.GetLayersDrawingSize();
+            var graphCanvas = new GraphicsCanvas(graph, this.ControlCanvas.Size.Width, this.ControlCanvas.Size.Height);
             int x = 0;
+
+            _selectionResolver.SetCurrentRootCanvas(graphCanvas);
 
             IDictionary<NodeBase, INodeDrawing> previousNodesDic = new Dictionary<NodeBase, INodeDrawing>();
 
-            var inputLayer = _controlCanvas.Control.InputLayer;
-            var preferences = _controlCanvas.Control.Preferences;
+            var inputLayer = this.ControlCanvas.Control.InputLayer;
+            var preferences = this.ControlCanvas.Control.Preferences;
 
             LayerSizesPreCalc layersCache = new LayerSizesPreCalc(layersDrawingSize, inputLayer.GetMaxNodeCountInLayer(), preferences);
             SimpleNodeSizesPreCalc simpleNodesCache = new SimpleNodeSizesPreCalc();
@@ -128,11 +136,11 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
 
                 if (layer == inputLayer)
                 {
-                    layerDrawing = new InputLayerDrawing(layer as InputLayer, preferences, layersCache, simpleNodesCache);
+                    layerDrawing = new InputLayerDrawing(layer as InputLayer, preferences, layersCache, simpleNodesCache, _selectionChecker, _selectableElementRegister);
                 }
                 else
                 {
-                    layerDrawing = new PerceptronLayerDrawing(layer as PerceptronLayer, previousNodesDic, graphCanvas, preferences, layersCache, perceptronCache, simpleNodesCache, edgesCache);
+                    layerDrawing = new PerceptronLayerDrawing(layer as PerceptronLayer, previousNodesDic, graphCanvas, preferences, layersCache, perceptronCache, simpleNodesCache, edgesCache, _selectionChecker, _selectableElementRegister);
                 }
 
                 var canvasRect = new Rectangle(x, 0, layersDrawingSize.Width, layersDrawingSize.Height);

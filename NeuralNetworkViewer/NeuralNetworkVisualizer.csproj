@@ -53,6 +53,7 @@
     <Compile Include="Drawing\Controls\IControlCanvas.cs" />
     <Compile Include="Drawing\Controls\IControlDrawing.cs" />
     <Compile Include="Drawing\IDrawing.cs" />
+    <Compile Include="Drawing\Layers\ILayerDrawing.cs" />
     <Compile Include="Drawing\PreCalc\EdgeSizesPreCalc.cs" />
     <Compile Include="Drawing\PreCalc\LayerSizesPreCalc.cs" />
     <Compile Include="Drawing\PreCalc\NodeSizesPreCalc.cs" />
@@ -118,6 +119,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Selection\IElementSelectionChecker.cs" />
+    <Compile Include="Selection\ISelectableElementRegister.cs" />
+    <Compile Include="Selection\IElementSelector.cs" />
+    <Compile Include="Selection\ISelectionResolver.cs" />
+    <Compile Include="Selection\SelectableElementRegister.cs" />
+    <Compile Include="Selection\SelectionEventArgs.cs" />
+    <Compile Include="Selection\ElementSelector.cs" />
+    <Compile Include="Selection\RegistrationInfo.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>

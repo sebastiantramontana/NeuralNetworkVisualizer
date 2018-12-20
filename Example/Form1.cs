@@ -4,6 +4,7 @@ using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences.Brushes;
 using NeuralNetworkVisualizer.Preferences.Formatting;
 using NeuralNetworkVisualizer.Preferences.Text;
+using NeuralNetworkVisualizer.Selection;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -17,6 +18,60 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
+
+            NeuralNetworkVisualizerControl1.SelectBias += NeuralNetworkVisualizerControl1_SelectBias;
+            NeuralNetworkVisualizerControl1.SelectEdge += NeuralNetworkVisualizerControl1_SelectEdge;
+            NeuralNetworkVisualizerControl1.SelectInput += NeuralNetworkVisualizerControl1_SelectInput;
+            NeuralNetworkVisualizerControl1.SelectInputLayer += NeuralNetworkVisualizerControl1_SelectInputLayer;
+            NeuralNetworkVisualizerControl1.SelectPerceptron += NeuralNetworkVisualizerControl1_SelectPerceptron;
+            NeuralNetworkVisualizerControl1.SelectPerceptronLayer += NeuralNetworkVisualizerControl1_SelectPerceptronLayer;
+        }
+
+        private void NeuralNetworkVisualizerControl1_SelectPerceptronLayer(object sender, SelectionEventArgs<PerceptronLayer> e)
+        {
+            ShowSelectedElements();
+            ShowLastSelection($"Perceptron Layer: {e.Element.Id}", e.IsSelected);
+        }
+
+        private void NeuralNetworkVisualizerControl1_SelectPerceptron(object sender, SelectionEventArgs<Perceptron> e)
+        {
+            ShowSelectedElements();
+            ShowLastSelection($"Perceptron: {e.Element.Id}", e.IsSelected);
+        }
+
+        private void NeuralNetworkVisualizerControl1_SelectInputLayer(object sender, SelectionEventArgs<InputLayer> e)
+        {
+            ShowSelectedElements();
+            ShowLastSelection($"Input Layer: {e.Element.Id}", e.IsSelected);
+        }
+
+        private void NeuralNetworkVisualizerControl1_SelectInput(object sender, SelectionEventArgs<Input> e)
+        {
+            ShowSelectedElements();
+            ShowLastSelection($"Input: {e.Element.Id}", e.IsSelected);
+        }
+
+        private void NeuralNetworkVisualizerControl1_SelectEdge(object sender, SelectionEventArgs<Edge> e)
+        {
+            ShowSelectedElements();
+            ShowLastSelection($"Edge: {e.Element.Id}", e.IsSelected);
+        }
+
+        private void NeuralNetworkVisualizerControl1_SelectBias(object sender, SelectionEventArgs<Bias> e)
+        {
+            ShowSelectedElements();
+            ShowLastSelection($"Bias: {e.Element.Id}", e.IsSelected);
+        }
+
+        private void ShowSelectedElements()
+        {
+            txtSelectedElements.Text = string.Join(", ", NeuralNetworkVisualizerControl1.SelectedElements.Select(se => se.Id));
+        }
+
+        private void ShowLastSelection(string text, bool isSelected)
+        {
+            txtLastSelected.BackColor = isSelected ? Color.LightGreen : Color.LightPink;
+            txtLastSelected.Text = text;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -167,6 +222,12 @@ namespace WindowsFormsApp1
         {
             NeuralNetworkVisualizerControl1.Preferences.Quality = (RenderQuality)cboQuality.SelectedItem;
             NeuralNetworkVisualizerControl1.Redraw();
+        }
+
+        private async void chSelectable_CheckedChanged(object sender, EventArgs e)
+        {
+            NeuralNetworkVisualizerControl1.Preferences.Selectable = chSelectable.Checked;
+            await NeuralNetworkVisualizerControl1.RedrawAsync(); //always call to Redraw or RedrawAsync
         }
     }
 }

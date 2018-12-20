@@ -21,6 +21,20 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _border = value;
         }
 
+        private IPen _borderSelected;
+        public IPen BorderSelected
+        {
+            get => _borderSelected ?? (_borderSelected = new SimplePen(Draw.Pens.Transparent));
+            set => _borderSelected = value;
+        }
+
+        private IBrushPreference _backgroundSelected;
+        public IBrushPreference BackgroundSelected
+        {
+            get => _backgroundSelected ?? (_backgroundSelected = new SolidBrushPreference(Draw.Color.Transparent));
+            set => _backgroundSelected = value;
+        }
+
         private LayerTitlePreference _title;
         public LayerTitlePreference Title
         {

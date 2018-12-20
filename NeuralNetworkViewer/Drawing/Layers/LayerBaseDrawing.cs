@@ -5,17 +5,13 @@ using NeuralNetworkVisualizer.Model.Layers;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences;
 using NeuralNetworkVisualizer.Preferences.Brushes;
+using NeuralNetworkVisualizer.Selection;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
 namespace NeuralNetworkVisualizer.Drawing.Layers
 {
-    internal interface ILayerDrawing : IDrawing
-    {
-        IEnumerable<INodeDrawing> NodesDrawing { get; }
-    }
-
     internal abstract class LayerBaseDrawing<TLayer, TNode> : DrawingBase<TLayer>, ILayerDrawing
         where TLayer : LayerBase<TNode>
         where TNode : NodeBase
@@ -23,13 +19,17 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         private readonly Preference _preferences;
         private readonly LayerSizesPreCalc _cache;
         private readonly SimpleNodeSizesPreCalc _biasCache;
+        private readonly IElementSelectionChecker _selectionChecker;
+        private readonly ISelectableElementRegister _selectableElementRegister;
         private readonly IList<INodeDrawing> _nodesDrawing;
 
-        internal LayerBaseDrawing(TLayer layer, Preference preferences, LayerSizesPreCalc cache, SimpleNodeSizesPreCalc biasCache) : base(layer)
+        internal LayerBaseDrawing(TLayer layer, Preference preferences, LayerSizesPreCalc cache, SimpleNodeSizesPreCalc biasCache, IElementSelectionChecker selectionChecker, ISelectableElementRegister selectableElementRegister) : base(layer)
         {
             _preferences = preferences;
             _cache = cache;
             _biasCache = biasCache;
+            _selectionChecker = selectionChecker;
+            _selectableElementRegister = selectableElementRegister;
             _nodesDrawing = new List<INodeDrawing>(layer.GetAllNodes().Count());
         }
 
@@ -38,9 +38,12 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
         public override void Draw(ICanvas canvas)
         {
             var rect = new Rectangle(0, 0, canvas.MaxWidth, canvas.MaxHeight);
+            _selectableElementRegister.Register(new RegistrationInfo(this.Element, canvas, new Region(rect), 1));
 
-            using (var brush = _preferences.Layers.Background.CreateBrush())
-            using (var pen = _preferences.Layers.Border.CreatePen())
+            var isSelected = _selectionChecker.IsSelected(this.Element);
+
+            using (var brush = GetBrush(isSelected))
+            using (var pen = GetPen(isSelected))
             {
                 canvas.DrawRectangle(rect, pen, brush);
             }
@@ -49,13 +52,27 @@ namespace NeuralNetworkVisualizer.Drawing.Layers
             DrawNodes(canvas);
         }
 
+        private Pen GetPen(bool isSelected)
+        {
+            return (isSelected)
+                ? _preferences.Layers.BorderSelected.CreatePen()
+                : _preferences.Layers.Border.CreatePen();
+        }
+
+        private Brush GetBrush(bool isSelected)
+        {
+            return (isSelected)
+                ? _preferences.Layers.BackgroundSelected.CreateBrush()
+                : _preferences.Layers.Background.CreateBrush();
+        }
+
         private void DrawNodes(ICanvas canvas)
         {
             int y = _cache.StartingY + (_cache.TotalNodesHeight - _cache.NodeHeight * this.Element.GetAllNodes().Count()) / 2;
 
             if (this.Element.Bias != null)
             {
-                var biasDrawing = new BiasDrawing(this.Element.Bias, _preferences, _biasCache);
+                var biasDrawing = new BiasDrawing(this.Element.Bias, _preferences, _biasCache, _selectableElementRegister, _selectionChecker);
                 InternalDrawNode(biasDrawing);
             }
 

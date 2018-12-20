@@ -2,6 +2,7 @@
 using NeuralNetworkVisualizer.Drawing.Canvas;
 using NeuralNetworkVisualizer.Model.Nodes;
 using NeuralNetworkVisualizer.Preferences;
+using NeuralNetworkVisualizer.Selection;
 using System;
 using System.Drawing;
 
@@ -12,7 +13,7 @@ namespace NeuralNetworkVisualizer.Drawing.Nodes
         private readonly NodePreference _preferences;
         private readonly SimpleNodeSizesPreCalc _cache;
 
-        internal SimpleNodeDrawing(TNode element, NodePreference preferences, SimpleNodeSizesPreCalc cache) : base(element, preferences, cache)
+        internal SimpleNodeDrawing(TNode element, NodePreference preferences, SimpleNodeSizesPreCalc cache, IElementSelectionChecker selectionChecker, ISelectableElementRegister selectableElementRegister) : base(element, preferences, cache, selectableElementRegister, selectionChecker)
         {
             _preferences = preferences;
             _cache = cache;

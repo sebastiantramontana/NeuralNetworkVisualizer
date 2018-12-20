@@ -1,6 +1,8 @@
 ﻿using NeuralNetworkVisualizer.Preferences.Formatting;
+using NeuralNetworkVisualizer.Preferences.Pens;
 using NeuralNetworkVisualizer.Preferences.Text;
 using System.Drawing;
+using Draw = System.Drawing;
 
 namespace NeuralNetworkVisualizer.Preferences
 {
@@ -21,6 +23,13 @@ namespace NeuralNetworkVisualizer.Preferences
         {
             get => _connectorFormatter ?? (_connectorFormatter = new BasicFormatter<Pen>(() => new Pen(Color.Transparent)));
             set => _connectorFormatter = value;
+        }
+
+        private IPen _whenSelected = new SimplePen(Draw.Pens.Orange);
+        public IPen WhenSelected
+        {
+            get => _whenSelected ?? (_whenSelected = new SimplePen(Draw.Pens.Transparent));
+            set => _whenSelected = value;
         }
 
         public byte RoundingDigits { get; set; } = 3;

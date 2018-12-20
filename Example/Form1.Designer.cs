@@ -37,6 +37,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.NeuralNetworkVisualizerControl1 = new NeuralNetworkVisualizer.NeuralNetworkVisualizerControl();
             this.btnChangeValue = new System.Windows.Forms.Button();
+            this.chSelectable = new System.Windows.Forms.CheckBox();
+            this.txtSelectedElements = new System.Windows.Forms.TextBox();
+            this.txtLastSelected = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackZoom)).BeginInit();
             this.SuspendLayout();
             // 
@@ -151,11 +154,45 @@
             this.btnChangeValue.UseVisualStyleBackColor = true;
             this.btnChangeValue.Click += new System.EventHandler(this.btnChangeValue_Click);
             // 
+            // chSelectable
+            // 
+            this.chSelectable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chSelectable.AutoSize = true;
+            this.chSelectable.Location = new System.Drawing.Point(745, 714);
+            this.chSelectable.Name = "chSelectable";
+            this.chSelectable.Size = new System.Drawing.Size(98, 17);
+            this.chSelectable.TabIndex = 12;
+            this.chSelectable.Text = "Allow Selection";
+            this.chSelectable.UseVisualStyleBackColor = true;
+            this.chSelectable.CheckedChanged += new System.EventHandler(this.chSelectable_CheckedChanged);
+            // 
+            // txtSelectedElements
+            // 
+            this.txtSelectedElements.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSelectedElements.Location = new System.Drawing.Point(849, 712);
+            this.txtSelectedElements.Name = "txtSelectedElements";
+            this.txtSelectedElements.ReadOnly = true;
+            this.txtSelectedElements.Size = new System.Drawing.Size(277, 20);
+            this.txtSelectedElements.TabIndex = 13;
+            // 
+            // txtLastSelected
+            // 
+            this.txtLastSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLastSelected.Location = new System.Drawing.Point(1132, 713);
+            this.txtLastSelected.Name = "txtLastSelected";
+            this.txtLastSelected.ReadOnly = true;
+            this.txtLastSelected.Size = new System.Drawing.Size(137, 20);
+            this.txtLastSelected.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1281, 741);
+            this.Controls.Add(this.txtLastSelected);
+            this.Controls.Add(this.txtSelectedElements);
+            this.Controls.Add(this.chSelectable);
             this.Controls.Add(this.btnChangeValue);
             this.Controls.Add(this.NeuralNetworkVisualizerControl1);
             this.Controls.Add(this.label2);
@@ -185,6 +222,9 @@
         private System.Windows.Forms.Label label2;
         private NeuralNetworkVisualizer.NeuralNetworkVisualizerControl NeuralNetworkVisualizerControl1;
         private System.Windows.Forms.Button btnChangeValue;
+        private System.Windows.Forms.CheckBox chSelectable;
+        private System.Windows.Forms.TextBox txtSelectedElements;
+        private System.Windows.Forms.TextBox txtLastSelected;
     }
 }
 

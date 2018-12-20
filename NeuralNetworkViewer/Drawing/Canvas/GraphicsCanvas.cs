@@ -7,7 +7,7 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
     internal class GraphicsCanvas : ICanvas
     {
         private Graphics _Graph;
-        public GraphicsCanvas(Graphics graph, int maxWidth, int maxHeight)
+        internal GraphicsCanvas(Graphics graph, int maxWidth, int maxHeight)
         {
             _Graph = graph;
             this.MaxWidth = maxWidth;
@@ -100,6 +100,11 @@ namespace NeuralNetworkVisualizer.Drawing.Canvas
 
         public Point Translate(Point position, ICanvas destination)
         {
+            if (destination == this )
+                return position;
+
+            var posTranslated = destination.Translate(new Point(0, 0), this);
+            position = new Point(position.X - posTranslated.X, position.Y - posTranslated.Y);
             return position;
         }
 

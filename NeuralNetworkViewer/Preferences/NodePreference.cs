@@ -16,6 +16,13 @@ namespace NeuralNetworkVisualizer.Preferences
             set => _background = value;
         }
 
+        private IBrushPreference _backgroundSelected;
+        public IBrushPreference BackgroundSelected
+        {
+            get => _backgroundSelected ?? (_backgroundSelected = new SolidBrushPreference(Draw.Color.Transparent));
+            set => _backgroundSelected = value;
+        }
+
         private IFormatter<TextPreference> _outputValueFormatter;
         public IFormatter<TextPreference> OutputValueFormatter
         {
@@ -28,6 +35,13 @@ namespace NeuralNetworkVisualizer.Preferences
         {
             get => _border ?? (_border = new SimplePen(Draw.Pens.Transparent));
             set => _border = value;
+        }
+
+        private IPen _borderSelected = new SimplePen(Draw.Pens.Orange);
+        public IPen BorderSelected
+        {
+            get => _borderSelected ?? (_borderSelected = new SimplePen(Draw.Pens.Transparent));
+            set => _borderSelected = value;
         }
 
         public byte RoundingDigits { get; set; } = 3;
