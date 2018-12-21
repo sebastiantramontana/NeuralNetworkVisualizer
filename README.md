@@ -111,9 +111,14 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
             NeuralNetworkVisualizerControl1.InputLayer = _input; //Automatic rendering
             //NeuralNetworkVisualizerControl1.InputLayer = null; //Leave blank when needed
             
+            
+            
+            
+            
             /*************** Make NN Elements Selectable *****************/
             //Drawing resize behavior: The selectable elements are: Layers, Nodes (all types) and Edge connectors
             
+                        
             NeuralNetworkVisualizerControl1.Selectable = true; //default is false
             
             //Each selectable element has its own typed-safe "Select" event
