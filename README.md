@@ -7,6 +7,7 @@ Easy neural network visualizer winform control for .Net
 ![Layers Titles](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalWithTitles.PNG)
 ![Several Nodes](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodes.PNG)
 ![Zoomed](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodesZoomed.png)
+![Elements Selection](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalSelectedElements.png)
 
 ## Installing
 Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/NeuralNetworkVisualizer).
@@ -14,7 +15,7 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
 ## Example
 
 ```C#
-            /******** Configure Preferences: ********/
+            /******** Configure Some Preferences: ********/
             
             //Drawing resize behavior
             NeuralNetworkVisualizerControl1.Preferences.AsyncRedrawOnResize = false; //default is true
@@ -64,7 +65,7 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
 
 
 
-            /*************** Set the NN model *****************/
+            /*************** Set the NN Model *****************/
 
             var _input = new InputLayer("Input")
             {
@@ -109,3 +110,48 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
 
             NeuralNetworkVisualizerControl1.InputLayer = _input; //Automatic rendering
             //NeuralNetworkVisualizerControl1.InputLayer = null; //Leave blank when needed
+            
+            /*************** Make NN Elements Selectable *****************/
+            //Drawing resize behavior: The selectable elements are: Layers, Nodes (all types) and Edge connectors
+            
+            NeuralNetworkVisualizerControl1.Selectable = true; //default is false
+            
+            //Each selectable element has its own typed-safe "Select" event
+            NeuralNetworkVisualizerControl1.SelectBias += NeuralNetworkVisualizerControl1_SelectBias;
+            NeuralNetworkVisualizerControl1.SelectEdge += NeuralNetworkVisualizerControl1_SelectEdge;
+            NeuralNetworkVisualizerControl1.SelectInput += NeuralNetworkVisualizerControl1_SelectInput;
+            NeuralNetworkVisualizerControl1.SelectInputLayer += NeuralNetworkVisualizerControl1_SelectInputLayer;
+            NeuralNetworkVisualizerControl1.SelectPerceptron += NeuralNetworkVisualizerControl1_SelectPerceptron;
+            NeuralNetworkVisualizerControl1.SelectPerceptronLayer += NeuralNetworkVisualizerControl1_SelectPerceptronLayer;
+            
+            private void NeuralNetworkVisualizerControl1_SelectPerceptronLayer(object sender, SelectionEventArgs<PerceptronLayer> e)
+            {
+                //...
+            }
+
+            private void NeuralNetworkVisualizerControl1_SelectPerceptron(object sender, SelectionEventArgs<Perceptron> e)
+            {
+                //...
+            }
+
+            private void NeuralNetworkVisualizerControl1_SelectInputLayer(object sender, SelectionEventArgs<InputLayer> e)
+            {
+                //...
+            }
+
+            private void NeuralNetworkVisualizerControl1_SelectInput(object sender, SelectionEventArgs<Input> e)
+            {
+                //...
+            }
+
+            private void NeuralNetworkVisualizerControl1_SelectEdge(object sender, SelectionEventArgs<Edge> e)
+            {
+                //...
+            }
+
+            private void NeuralNetworkVisualizerControl1_SelectBias(object sender, SelectionEventArgs<Bias> e)
+            {
+                //...
+            }
+            
+            
