@@ -73,7 +73,6 @@ namespace NeuralNetworkVisualizer.Preferences
         public byte NodeMargins { get; set; } = 5;
         public RenderQuality Quality { get; set; } = RenderQuality.Medium;
         public bool AsyncRedrawOnResize { get; set; } = false;
-        public bool Selectable { get; set; } = false;
 
         public void Dispose()
         {

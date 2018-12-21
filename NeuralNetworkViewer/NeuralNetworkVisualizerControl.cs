@@ -64,7 +64,23 @@ namespace NeuralNetworkVisualizer
             }
         }
 
-        public IEnumerable<Element> SelectedElements => _selector.SelectedElements.ToArray(); //ToArray() to avoid hacking
+        public IEnumerable<Element> SelectedElements => _selector.SelectedElements;
+
+        private bool _selectable = false;
+        public bool Selectable
+        {
+            get => _selectable;
+            set
+            {
+                _selectable = value;
+
+                if (!_selectable)
+                {
+                    _selector.UnselectAll();
+                    Redraw();
+                }
+            }
+        }
 
         private float _zoom = 1;
         [Browsable(false)]
@@ -121,7 +137,7 @@ namespace NeuralNetworkVisualizer
 
         private void FireSelectionEvent(object sender, MouseEventArgs e)
         {
-            if (!_preferences.Selectable)
+            if (!_selectable)
                 return;
 
             Func<Point, Element> selectFunc;

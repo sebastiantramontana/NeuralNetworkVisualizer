@@ -11,5 +11,6 @@ namespace NeuralNetworkVisualizer.Selection
         Element SelectOnly(Point location);
         Element AddToSelection(Point location);
         Element Unselect(Point location);
+        void UnselectAll();
     }
 }

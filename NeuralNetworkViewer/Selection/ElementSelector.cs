@@ -1,6 +1,7 @@
 ﻿using NeuralNetworkVisualizer.Model;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace NeuralNetworkVisualizer.Selection
 {
@@ -15,7 +16,7 @@ namespace NeuralNetworkVisualizer.Selection
             _selectionResolver = selectionResolver;
         }
 
-        public IEnumerable<Element> SelectedElements => _selectedElements;
+        public IEnumerable<Element> SelectedElements => _selectedElements.ToArray();
 
         public bool IsSelected(Element element)
         {
@@ -48,11 +49,15 @@ namespace NeuralNetworkVisualizer.Selection
             if (elem == null || !_selectedElements.Contains(elem))
             {
                 return null;
-
             }
 
             _selectedElements.Remove(elem);
             return elem;
+        }
+
+        public void UnselectAll()
+        {
+            _selectedElements.Clear();
         }
     }
 }

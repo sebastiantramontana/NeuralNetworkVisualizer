@@ -224,10 +224,9 @@ namespace WindowsFormsApp1
             NeuralNetworkVisualizerControl1.Redraw();
         }
 
-        private async void chSelectable_CheckedChanged(object sender, EventArgs e)
+        private void chSelectable_CheckedChanged(object sender, EventArgs e)
         {
-            NeuralNetworkVisualizerControl1.Preferences.Selectable = chSelectable.Checked;
-            await NeuralNetworkVisualizerControl1.RedrawAsync(); //always call to Redraw or RedrawAsync
+            NeuralNetworkVisualizerControl1.Selectable = chSelectable.Checked;
         }
     }
 }
