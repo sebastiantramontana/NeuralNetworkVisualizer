@@ -13,7 +13,7 @@ Easy neural network visualizer winform control for .Net
 ### Zoomed in
 ![Zoomed](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/SeveralNodesZoomed.png)
 ### Elements selection. 
-In the following screenshot: Input nodes (dark green), edges connectors (orange), perceptron (dark blue) and the output layer (gray background and orange borders)
+In the following screenshot: Input nodes (dark green), edges connectors (orange), perceptron (dark blue) and the output layer (gray background and orange borders) were selected.
 ![Elements Selection](https://github.com/sebastiantramontana/NeuralNetworkVisualizer/raw/master/docs/NormalSelectedElements.png)
 
 ## Installing
