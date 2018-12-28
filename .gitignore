@@ -235,3 +235,4 @@ FakesAssemblies/
 /Example/obj/Debug/*.CopyComplete
 /Example/obj/Debug/*.txt
 /Example/obj/Debug/*.resources
+/certificado.cer
