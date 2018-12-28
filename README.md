@@ -123,8 +123,10 @@ Install NeuralNetworkVisualizer from [Nuget](https://www.nuget.org/packages/Neur
             
             
             /*************** Make NN Elements Selectable *****************/
-            //The selectable elements are: Layers, Nodes (all types) and Edge connectors
-            
+            //The selectable elements are: Layers, Nodes (all types) and Edge connectors.
+            // Do a single click for single selection.
+            // Press **SHIFT** key when click for multiple one.
+            // Press **CTRL** key when click to unselect an element.
                         
             NeuralNetworkVisualizerControl1.Selectable = true; //default is false
             
