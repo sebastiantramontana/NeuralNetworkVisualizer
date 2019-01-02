@@ -39,6 +39,7 @@ namespace NeuralNetworkVisualizer
             this.BackColor = Color.White;
 
             picCanvas.MouseDown += FireSelectionEvent;
+            picCanvas.MouseHover += ShowTooltip;
         }
 
         private Preference _preferences = new Preference();
@@ -135,6 +136,12 @@ namespace NeuralNetworkVisualizer
             base.OnSizeChanged(e);
         }
 
+        private void ShowTooltip(object sender, EventArgs e)
+        {
+            ToolTip toolTip = new ToolTip(this.Container);
+            
+        }
+
         private void FireSelectionEvent(object sender, MouseEventArgs e)
         {
             if (!_selectable)
@@ -193,7 +200,7 @@ namespace NeuralNetworkVisualizer
                 return;
         }
 
-        private bool FireSelectionEvent<TElement>(Element element, bool isSelected, EventHandler<SelectionEventArgs<TElement>> eventHandler) where TElement : Element
+        internal bool FireSelectionEvent<TElement>(Element element, bool isSelected, EventHandler<SelectionEventArgs<TElement>> eventHandler) where TElement : Element
         {
             var fired = false;
 

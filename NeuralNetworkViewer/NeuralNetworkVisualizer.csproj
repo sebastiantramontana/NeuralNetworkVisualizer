@@ -52,6 +52,7 @@
     <Compile Include="Drawing\Controls\ControlDrawing.cs" />
     <Compile Include="Drawing\Controls\IControlCanvas.cs" />
     <Compile Include="Drawing\Controls\IControlDrawing.cs" />
+    <Compile Include="Drawing\Controls\SelectionEventFiring.cs" />
     <Compile Include="Drawing\IDrawing.cs" />
     <Compile Include="Drawing\Layers\ILayerDrawing.cs" />
     <Compile Include="Drawing\PreCalc\EdgeSizesPreCalc.cs" />
