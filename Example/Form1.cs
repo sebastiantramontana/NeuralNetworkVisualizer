@@ -111,7 +111,7 @@ namespace WindowsFormsApp1
             NeuralNetworkVisualizerControl1.Preferences.AsyncRedrawOnResize = false;
 
             //To remove layer's titles
-            NeuralNetworkVisualizerControl1.Preferences.Layers.Title = null;
+            //NeuralNetworkVisualizerControl1.Preferences.Layers.Title = null;
         }
 
         private void btnStart_Click(object sender, EventArgs e)

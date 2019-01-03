@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,6 +17,8 @@ namespace NeuralNetworkVisualizer
     {
         private readonly IControlDrawing _controlDrawing;
         private readonly IElementSelector _selector;
+        private readonly ISelectionEventFiring _selectionEventFiring;
+        private readonly IToolTipFiring _toolTipFiring;
 
         public event EventHandler<SelectionEventArgs<InputLayer>> SelectInputLayer;
         public event EventHandler<SelectionEventArgs<PerceptronLayer>> SelectPerceptronLayer;
@@ -30,16 +31,25 @@ namespace NeuralNetworkVisualizer
         {
             InitializeComponent();
 
-            var selectionResolver = new SelectableElementRegister();
-            _selector = new ElementSelector(selectionResolver);
+            var selectableElementRegisterResolver = new SelectableElementRegister();
+            _selector = new ElementSelector(selectableElementRegisterResolver);
 
-            _controlDrawing = new ControlDrawing(new ControlCanvas(this.picCanvas, this), _selector, selectionResolver, selectionResolver);
+            _controlDrawing = new ControlDrawing(new ControlCanvas(this.picCanvas, this), _selector, selectableElementRegisterResolver, selectableElementRegisterResolver);
+            _toolTipFiring = new ToolTipFiring(this, picCanvas, selectableElementRegisterResolver);
+            _selectionEventFiring = new SelectionEventFiring(this, _selector,
+                                       () => this.SelectInputLayer,
+                                       () => this.SelectPerceptronLayer,
+                                       () => this.SelectBias,
+                                       () => this.SelectInput,
+                                       () => this.SelectPerceptron,
+                                       () => this.SelectEdge);
 
             Control.CheckForIllegalCrossThreadCalls = true;
             this.BackColor = Color.White;
 
-            picCanvas.MouseDown += FireSelectionEvent;
-            picCanvas.MouseHover += ShowTooltip;
+            picCanvas.MouseDown += PicCanvas_MouseDown;
+            picCanvas.MouseMove += PicCanvas_MouseMove;
+            picCanvas.MouseLeave += PicCanvas_MouseLeave;
         }
 
         private Preference _preferences = new Preference();
@@ -136,81 +146,19 @@ namespace NeuralNetworkVisualizer
             base.OnSizeChanged(e);
         }
 
-        private void ShowTooltip(object sender, EventArgs e)
+        private void PicCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            ToolTip toolTip = new ToolTip(this.Container);
-            
+            _selectionEventFiring.FireSelectionEvent(e.Location);
         }
 
-        private void FireSelectionEvent(object sender, MouseEventArgs e)
+        private void PicCanvas_MouseLeave(object sender, EventArgs e)
         {
-            if (!_selectable)
-                return;
-
-            Func<Point, Element> selectFunc;
-            bool isSelected;
-
-            switch (Control.ModifierKeys)
-            {
-                case Keys.Control:
-                    selectFunc = _selector.Unselect;
-                    isSelected = false;
-                    break;
-                case Keys.Shift:
-                    selectFunc = _selector.AddToSelection;
-                    isSelected = true;
-                    break;
-                default:
-                    selectFunc = _selector.SelectOnly;
-                    isSelected = true;
-                    break;
-            }
-
-            var element = selectFunc(e.Location);
-
-            if (element == null)
-            {
-                return;
-            }
-
-            FireSelectionEvent(element, isSelected);
-            Redraw();
-
-            base.OnMouseDown(e);
+            _toolTipFiring.Hide();
         }
 
-        private void FireSelectionEvent(Element element, bool isSelected)
+        private void PicCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (FireSelectionEvent(element, isSelected, SelectInputLayer))
-                return;
-
-            if (FireSelectionEvent(element, isSelected, SelectPerceptronLayer))
-                return;
-
-            if (FireSelectionEvent(element, isSelected, SelectBias))
-                return;
-
-            if (FireSelectionEvent(element, isSelected, SelectInput))
-                return;
-
-            if (FireSelectionEvent(element, isSelected, SelectPerceptron))
-                return;
-
-            if (FireSelectionEvent(element, isSelected, SelectEdge))
-                return;
-        }
-
-        internal bool FireSelectionEvent<TElement>(Element element, bool isSelected, EventHandler<SelectionEventArgs<TElement>> eventHandler) where TElement : Element
-        {
-            var fired = false;
-
-            if (element is TElement typedElement)
-            {
-                eventHandler?.Invoke(this, new SelectionEventArgs<TElement>(typedElement, isSelected));
-                fired = true;
-            }
-
-            return fired;
+            _toolTipFiring.Show(e.Location);
         }
 
         private T Constrain<T>(T low, T value, T max) where T : IComparable<T>

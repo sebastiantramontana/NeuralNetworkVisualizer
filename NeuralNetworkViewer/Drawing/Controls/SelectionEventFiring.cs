@@ -3,21 +3,48 @@ using NeuralNetworkVisualizer.Selection;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using SelectBias = System.Func<System.EventHandler<NeuralNetworkVisualizer.Selection.SelectionEventArgs<NeuralNetworkVisualizer.Model.Nodes.Bias>>>;
+using SelectEdge = System.Func<System.EventHandler<NeuralNetworkVisualizer.Selection.SelectionEventArgs<NeuralNetworkVisualizer.Model.Nodes.Edge>>>;
+using SelectInput = System.Func<System.EventHandler<NeuralNetworkVisualizer.Selection.SelectionEventArgs<NeuralNetworkVisualizer.Model.Nodes.Input>>>;
+using SelectInputLayer = System.Func<System.EventHandler<NeuralNetworkVisualizer.Selection.SelectionEventArgs<NeuralNetworkVisualizer.Model.Layers.InputLayer>>>;
+using SelectPerceptron = System.Func<System.EventHandler<NeuralNetworkVisualizer.Selection.SelectionEventArgs<NeuralNetworkVisualizer.Model.Nodes.Perceptron>>>;
+using SelectPerceptronLayer = System.Func<System.EventHandler<NeuralNetworkVisualizer.Selection.SelectionEventArgs<NeuralNetworkVisualizer.Model.Layers.PerceptronLayer>>>;
+
 
 namespace NeuralNetworkVisualizer.Drawing.Controls
 {
-    internal class SelectionEventFiring
+    internal class SelectionEventFiring : ISelectionEventFiring
     {
         private readonly NeuralNetworkVisualizerControl _control;
         private readonly IElementSelector _selector;
 
-        internal SelectionEventFiring(NeuralNetworkVisualizerControl control, IElementSelector selector)
+        private readonly SelectInputLayer _selectInputLayer;
+        private readonly SelectPerceptronLayer _selectPerceptronLayer;
+        private readonly SelectBias _selectBias;
+        private readonly SelectInput _selectInput;
+        private readonly SelectPerceptron _selectPerceptron;
+        private readonly SelectEdge _selectEdge;
+
+        internal SelectionEventFiring(NeuralNetworkVisualizerControl control, IElementSelector selector,
+            SelectInputLayer selectInputLayer,
+            SelectPerceptronLayer selectPerceptronLayer,
+            SelectBias selectBias,
+            SelectInput selectInput,
+            SelectPerceptron selectPerceptron,
+            SelectEdge selectEdge)
         {
             _control = control;
             _selector = selector;
+
+            _selectInputLayer = selectInputLayer;
+            _selectPerceptronLayer = selectPerceptronLayer;
+            _selectBias = selectBias;
+            _selectInput = selectInput;
+            _selectPerceptron = selectPerceptron;
+            _selectEdge = selectEdge;
         }
 
-        private void FireSelectionEvent(object sender, MouseEventArgs e)
+        public void FireSelectionEvent(Point location)
         {
             if (!_control.Selectable)
                 return;
@@ -41,7 +68,7 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
                     break;
             }
 
-            var element = selectFunc(e.Location);
+            var element = selectFunc(location);
 
             if (element == null)
             {
@@ -54,23 +81,37 @@ namespace NeuralNetworkVisualizer.Drawing.Controls
 
         private void FireSelectionEvent(Element element, bool isSelected)
         {
-            if (_control.FireSelectionEvent(element, isSelected, _control.SelectInputLayer))
+            if (FireSelectionEvent(element, isSelected, _selectInputLayer))
                 return;
 
-            if (FireSelectionEvent(element, isSelected, SelectPerceptronLayer))
+            if (FireSelectionEvent(element, isSelected, _selectPerceptronLayer))
                 return;
 
-            if (FireSelectionEvent(element, isSelected, SelectBias))
+            if (FireSelectionEvent(element, isSelected, _selectBias))
                 return;
 
-            if (FireSelectionEvent(element, isSelected, SelectInput))
+            if (FireSelectionEvent(element, isSelected, _selectInput))
                 return;
 
-            if (FireSelectionEvent(element, isSelected, SelectPerceptron))
+            if (FireSelectionEvent(element, isSelected, _selectPerceptron))
                 return;
 
-            if (FireSelectionEvent(element, isSelected, SelectEdge))
+            if (FireSelectionEvent(element, isSelected, _selectEdge))
                 return;
+        }
+
+        private bool FireSelectionEvent<TElement>(Element element, bool isSelected, Func<EventHandler<SelectionEventArgs<TElement>>> eventFunc) where TElement : Element
+        {
+            var fired = false;
+
+            if (element is TElement typedElement)
+            {
+                var eventHandler = eventFunc();
+                eventHandler?.Invoke(_control, new SelectionEventArgs<TElement>(typedElement, isSelected));
+                fired = true;
+            }
+
+            return fired;
         }
     }
 }
