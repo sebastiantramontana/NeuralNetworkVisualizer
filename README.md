@@ -1,4 +1,4 @@
-# <DEPRECATED> NeuralNetworkVisualizer
+# [DEPRECATED] NeuralNetworkVisualizer
 This project is DEPRECATED and it is no longer maintained!
 Go to the new version: https://github.com/sebastiantramontana/NeuralNetwork.Visualizer
 
